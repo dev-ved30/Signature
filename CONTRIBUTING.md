@@ -6,9 +6,7 @@ This document provides some general guidelines and starter tips for contributors
 
 Assuming you have git installed, to get started all you need to do is:
 
-* Run `git clone https://github.com/Adi-UA/TooManyMatrices.git` in your terminal.
-
-For Widnows [Git Bash](https://gitforwindows.org/) is reccomended if you want the other commands in this doc to work, but equivalent commands in Powershell still obviously work.
+* Run `git clone https://github.com/dev-ved30/Signature.git` in your terminal.
 
 ## Workflow
 
@@ -24,10 +22,10 @@ To add a new feature (assuming you are inside the project directory):
 * Push your changes 
     * If you're pushing to the remote branch for the first time, run `git push --set-upstream origin feature`
     * Otheriwse run `git push`
-* Repeat the previous 4 steps as necessary on the new `feature` branch and when the changes are ready to merge into master, create a pull request from the Github website for [this repository](https://github.com/Adi-UA/TooManyMatrices). Remember to write good titles and descriptions when you open pull requests.
-* All pull requests must be reviewed by at least one person including [@Adi-UA](https://github.com/Adi-UA).
+* Repeat the previous 4 steps as necessary on the new `feature` branch and when the changes are ready to merge into master, create a pull request from the Github website for [this repository](https://github.com/dev-ved30/Signature). Remember to write good titles and descriptions when you open pull requests.
+* All pull requests must be reviewed by at least one person including [@dev-ved30](https://github.com/dev-ved30).
 
-* Once the feature branch ahs been merged into master, do the following:
+* Once the feature branch has been merged into master, do the following:
     * Switch back to the master branch with `git checkout master`
     * Pull the latest changes with `git pull`
     * Delete your local copy of the feature branch with `git branch -D feature`
