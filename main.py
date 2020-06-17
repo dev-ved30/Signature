@@ -24,11 +24,10 @@ def input_image():
             ("PNG files",
              "*.jpg")))
     if root.filename:
-        im = Image.open(root.filename)
+        im = Image.open(root.filename).convert('LA')
     else:
         print("No image was chosen")
     return im
-
 
 
 def process_image_to_RGBA_array(im):
@@ -49,9 +48,18 @@ def process_image_to_RGBA_array(im):
 
 
 def process_signature(im_arr):
-    # TODO - This function needs to be implemented
+    shape = im_arr.shape
+    rows = shape[0]
+    columns = shape[1]
+    for i in range(rows):
+        for j in range(columns):
+            if im_arr[i][j][0] > 110:
+                im_arr[i][j] = 0
+            else:
+                im_arr[i][j][0] = 255
+                im_arr[i][j][1] = 255
+                im_arr[i][j][2] = 255
     return im_arr
-
 
 
 def save_to_file(im_arr):
@@ -69,9 +77,9 @@ def save_to_file(im_arr):
 
     if filename:
         im.save(filename)
+        im.show()
     else:
         print("No save location was chosen")
-
 
 
 def main():
@@ -81,7 +89,7 @@ def main():
     It reads an image, preprocesses it, then processes it and finally
     saves it to a file.
     """
-    
+
     im = input_image()
     im_arr = process_image_to_RGBA_array(im)
     output_im_array = process_signature(im_arr)
