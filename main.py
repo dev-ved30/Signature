@@ -26,7 +26,7 @@ def input_image():
     if root.filename:
         im = Image.open(root.filename)
     else:
-        print(" No image was chosen")
+        print("No image was chosen")
     return im
 
 
