@@ -53,12 +53,10 @@ def process_signature(im_arr):
     columns = shape[1]
     for i in range(rows):
         for j in range(columns):
-            if im_arr[i][j][0] > 110:
-                im_arr[i][j] = 0
+            if im_arr[i][j][0] > 51:
+                im_arr[i][j] = 255
             else:
-                im_arr[i][j][0] = 255
-                im_arr[i][j][1] = 255
-                im_arr[i][j][2] = 255
+                im_arr[i][j] = 150
     return im_arr
 
 
