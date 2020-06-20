@@ -2,6 +2,7 @@ from tkinter import Tk
 from tkinter import filedialog
 from PIL import Image
 import numpy as np
+import cv2
 
 
 def input_image():
@@ -48,15 +49,20 @@ def process_image_to_RGBA_array(im):
 
 
 def process_signature(im_arr):
+
+    threshold = 204
     shape = im_arr.shape
     rows = shape[0]
     columns = shape[1]
     for i in range(rows):
         for j in range(columns):
-            if im_arr[i][j][0] > 51:
+            if im_arr[i][j][0] > threshold:
                 im_arr[i][j] = 255
             else:
-                im_arr[i][j] = 150
+                im_arr[i][j][0] = 15
+                im_arr[i][j][1] = 15
+                im_arr[i][j][2] = 15
+                im_arr[i][j][3] = 255
     return im_arr
 
 
@@ -80,6 +86,27 @@ def save_to_file(im_arr):
         print("No save location was chosen")
 
 
+def shadow_crusher(img):
+
+    rgb_planes = cv2.split(img)
+
+    result_planes = []
+    result_norm_planes = []
+    for plane in rgb_planes:
+        dilated_img = cv2.dilate(plane, np.ones((7, 7), np.uint8))
+        bg_img = cv2.medianBlur(dilated_img, 21)
+        diff_img = 255 - cv2.absdiff(plane, bg_img)
+        norm_img = cv2.normalize(
+            diff_img, None, alpha=0, beta=255, norm_type=cv2.NORM_MINMAX, dtype=cv2.CV_8UC1)
+        result_planes.append(diff_img)
+        result_norm_planes.append(norm_img)
+
+    result = cv2.merge(result_planes)
+    result_norm = cv2.merge(result_norm_planes)
+
+    return result_norm
+
+
 def main():
     """
     The directive method that runs the application.
@@ -90,6 +117,7 @@ def main():
 
     im = input_image()
     im_arr = process_image_to_RGBA_array(im)
+    im_arr = shadow_crusher(im_arr)
     output_im_array = process_signature(im_arr)
     save_to_file(output_im_array)
 
