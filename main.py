@@ -49,7 +49,17 @@ def process_image_to_RGBA_array(im):
 
 
 def process_signature(im_arr):
+    """
+    This function takes the numpy array of an image and goes through it pixel by pixel.
+    It checks if a pixel is above a certain threshold value. If it is, the pixel is turned
+    to a pure white pixel. Else, it gets converted to dark grey.
 
+    Args:
+        im_arr (numpy array): Numpy array that needs to be edited
+
+    Returns:
+        numpy array: Edited numpy array
+    """
     threshold = 204
     shape = im_arr.shape
     rows = shape[0]
@@ -87,7 +97,15 @@ def save_to_file(im_arr):
 
 
 def shadow_crusher(img):
+    """
+    This function takes the numpy array of an image and removes the shadows.
+    It returns a normalised image in the form of an array
+    Args:
+        img (numpy array): Image for which that shadow needs to be removed
 
+    Returns:
+        [numpy array]: Normalized Image with the shadows removed or flattened.
+    """
     rgb_planes = cv2.split(img)
 
     result_planes = []
