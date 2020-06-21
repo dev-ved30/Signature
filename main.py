@@ -68,10 +68,12 @@ def process_signature(im_arr):
     for i in range(rows):
         for j in range(columns):
             if im_arr[i][j][0] > threshold:
-                im_arr[i][j][1] = 0  # if brightness > threshold then assume it is part of the background and make it transparent.
+                # if brightness > threshold then assume it is part of the background and make it transparent.
+                im_arr[i][j][1] = 0
             else:
                 im_arr[i][j][0] = 15
-                im_arr[i][j][1] = 255  # Else make opaque with black value of 15
+                # Else make opaque with black value of 15
+                im_arr[i][j][1] = 255
     return im_arr
 
 
@@ -100,6 +102,27 @@ def shadow_crusher(img):
     """
     This function takes the numpy LA array of an image and removes the shadows.
     It returns a normalised image in the form of an array.
+
+    Steps:
+
+    Split: Changes mutlichannel image to 2 seperate single channel Images
+
+    Dilation: This uses a 7 by 7 pixel structure to dilate the image, 
+    which helps remove the content while preserving the shadows
+
+    Median Blur: This blurs or smoothens the dilated image. As a result,
+    the places from where the content is removed does not appear to be 
+    pixelated. The aperture size is 21.
+
+    Absolute Difference: This compares the orignal image with the blurred one,
+    pixel by pixel. If the difference between those is 255, which it would be for
+    pixels containing content, diff_image is assigned the value 0, which would make
+    those pixels black. Else, the pixel will get a whiter shade due to the difference.
+
+    Normalize: Normalizes the image to use the entire 8 bit range. alpha is the lower
+    boundary while beta is the upper one.  
+
+    Merge: Merges the different channels of the image into a single image.
 
     Args:
         img (numpy array): Image for which that shadow needs to be removed
