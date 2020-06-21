@@ -5,19 +5,29 @@
 
 ### Before Running (Assuming you have pip and git)
 
-On Windows, run the following in `cmd`
+On Windows in `cmd`:
 
 * Run `pip install numpy`
-* Run `python3 pip install Pillow`
+* Run `pip install Pillow`
 * Run `pip install opencv-python`
 
-If you're using a linux distro, you might need to install `tkinter`
+On Debian-based Linux in terminal:
+* Run `pip install numpy`
+* Run `pip install Pillow`
+* Run `sudo apt-get install python3.6-tk`
+* Run `sudo apt-get install python3-opencv`
 
-*Note:* For develoment and testing, we used `Pillow 7.1.2`, `Open CV 4.2.0`,`Python 3.7.4` and `Numpy 1.18.4`.
+*Note:* For develoment and testing, we used `Tkinter 8.6`, `Pillow 7.1.2`, `Open CV 4.2.0`,`Python 3.7.4` and `Numpy 1.18.4`.
 
 ### Running
 
-For now, users will need to run the code inside an IDE. For our testing, we used `Visual Studio Code` with the Python extension.
+In your terminal, navigate to the project folder you cloned and run:
+
+`python main.py`
+
+The command assumes python3 is aliased to python. On Windows if you only have Python 3.x installed the aliasing should be done for you, but on Linux you would have be more explicit depending on the distro and its version. So, if the command above fails try:
+
+`python3 main.py`
 
 We do plan on launching an `exe` for the this utility in a future release!
 
