@@ -107,8 +107,9 @@ def shadow_crusher(img):
 
     Split: Changes mutlichannel image to 2 seperate single channel Images
 
-    Dilation: This uses a 7 by 7 pixel structure to dilate the image, 
-    which helps remove the content while preserving the shadows
+    Dilation: This uses pixel clusters to dilate the image. It replaces the 
+    parts of the image where content appears with white squares that are 7 by 7
+    pixels which helps remove the content while preserving the shadows
 
     Median Blur: This blurs or smoothens the dilated image. As a result,
     the places from where the content is removed does not appear to be 
@@ -120,7 +121,9 @@ def shadow_crusher(img):
     those pixels black. Else, the pixel will get a whiter shade due to the difference.
 
     Normalize: Normalizes the image to use the entire 8 bit range. alpha is the lower
-    boundary while beta is the upper one.  
+    boundary while beta is the upper one. It makes light parts of the image lighter and
+    dark part darker. This makes it easier to work with higher thresholds in the 
+    process_signature function.
 
     Merge: Merges the different channels of the image into a single image.
 
