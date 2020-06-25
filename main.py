@@ -61,7 +61,7 @@ def process_signature(im_arr):
     Returns:
         numpy array: Edited numpy array
     """
-    threshold = 204
+    threshold = 215
     shape = im_arr.shape
     rows = shape[0]
     columns = shape[1]
@@ -149,6 +149,14 @@ def shadow_crusher(img):
     return result_norm
 
 
+def alias(img):
+    img_thresh = cv2.threshold(img, 200, 255, cv2.THRESH_BINARY)[1]
+    img_blur = cv2.pyrUp(img_thresh)
+    img_blur = cv2.medianBlur(img_blur, 3)
+    img_blur = cv2.pyrDown(img_blur)
+    return img_blur
+
+
 def main():
     """
     The directive method that runs the application.
@@ -160,7 +168,9 @@ def main():
     im = input_image()
     im_arr = process_image_to_LA_array(im)
     im_arr = shadow_crusher(im_arr)
-    output_im_array = process_signature(im_arr)
+    im_arr = process_signature(im_arr)
+    output_im_array = alias(im_arr)
+
     save_to_file(output_im_array)
 
 
