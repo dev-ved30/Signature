@@ -61,7 +61,7 @@ def process_signature(im_arr):
     Returns:
         numpy array: Edited numpy array
     """
-    threshold = 215
+    threshold = 204
     shape = im_arr.shape
     rows = shape[0]
     columns = shape[1]
@@ -150,6 +150,27 @@ def shadow_crusher(img):
 
 
 def alias(img):
+    """
+    This function takes an image as a numpy array and smoothens the jaggy edges that are caused 
+    due to the thresholding. 
+
+    Steps:
+
+    Thresholding: Converts Image to a black and white one using the second parameter as the threshold.
+
+    Pyr Up: Increases the image to twice it's orignal size using the image pyramid methodology
+
+    Median Blur: Blurs the image images to soften the edges
+
+    Pyr Down: Decreases the image to half it's sized up version using the image pyramid methodology
+
+    Args:
+        img (numpy array): Image that needs to be smoothened
+
+    Returns:
+        numpy array: Smoothened image
+    """
+
     img_thresh = cv2.threshold(img, 200, 255, cv2.THRESH_BINARY)[1]
     img_blur = cv2.pyrUp(img_thresh)
     img_blur = cv2.medianBlur(img_blur, 3)
