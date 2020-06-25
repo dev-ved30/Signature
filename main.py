@@ -152,7 +152,7 @@ def shadow_crusher(img):
 def alias(img):
     img_thresh = cv2.threshold(img, 200, 255, cv2.THRESH_BINARY)[1]
     img_blur = cv2.pyrUp(img_thresh)
-    img_blur = cv2.medianBlur(img_blur, 3)
+    img_blur = cv2.medianBlur(img_blur, 4)
     img_blur = cv2.pyrDown(img_blur)
     return img_blur
 
