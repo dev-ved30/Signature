@@ -149,6 +149,34 @@ def shadow_crusher(img):
     return result_norm
 
 
+def alias(img):
+    """
+    This function takes an image as a numpy array and smoothens the jaggy edges that are caused 
+    due to the thresholding. 
+
+    Steps:
+
+    Thresholding: Converts Image to a black and white one using the second parameter as the threshold.
+
+    Pyr Up: Increases the image to twice it's orignal size using the image pyramid methodology
+
+    Median Blur: Blurs the image images to soften the edges
+
+    Pyr Down: Decreases the image to half it's sized up version using the image pyramid methodology
+
+    Args:
+        img (numpy array): Image that needs to be smoothened
+
+    Returns:
+        numpy array: Smoothened image
+    """
+
+    img_blur = cv2.pyrUp(img)
+    img_blur = cv2.medianBlur(img_blur, 3)
+    img_blur = cv2.pyrDown(img_blur)
+    return img_blur
+
+
 def main():
     """
     The directive method that runs the application.
@@ -160,7 +188,9 @@ def main():
     im = input_image()
     im_arr = process_image_to_LA_array(im)
     im_arr = shadow_crusher(im_arr)
-    output_im_array = process_signature(im_arr)
+    im_arr = process_signature(im_arr)
+    output_im_array = alias(im_arr)
+
     save_to_file(output_im_array)
 
 

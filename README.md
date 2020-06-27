@@ -1,5 +1,11 @@
 # Signature
+Have you ever been in a situation in which you wanted to include a picture of your signature in a document, but were held back due to this?
 
+![](images/orignal.png)
+
+That's where `Signature` comes in. Using python, we built a simple utility that does one job. Take a look!
+
+![](images/processed.png)
 
 ## Using Locally
 
