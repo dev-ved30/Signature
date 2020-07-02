@@ -25,7 +25,7 @@ def input_image():
             ("PNG files",
              "*.jpg")))
     if root.filename:
-        im = Image.open(root.filename)
+        im = cv2.imread(root.filename, 0)
     else:
         print("No image was chosen")
         exit(1)
@@ -61,20 +61,10 @@ def process_signature(im_arr):
     Returns:
         numpy array: Edited numpy array
     """
-    threshold = 204
-    shape = im_arr.shape
-    rows = shape[0]
-    columns = shape[1]
-    for i in range(rows):
-        for j in range(columns):
-            if im_arr[i][j][0] > threshold:
-                # if brightness > threshold then assume it is part of the background and make it transparent.
-                im_arr[i][j][1] = 0
-            else:
-                im_arr[i][j][0] = 15
-                # Else make opaque with black value of 15
-                im_arr[i][j][1] = 255
-    return im_arr
+
+    th3 = cv2.adaptiveThreshold(im_arr, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C,
+                                cv2.THRESH_BINARY, 11, 2)
+    return th3
 
 
 def save_to_file(im_arr):
@@ -85,8 +75,9 @@ def save_to_file(im_arr):
     Args:
         im_arr (Numpy array): The nd array representing the image. Make sure it can be converted to LA.
     """
-
+    print(type(im_arr))
     im = Image.fromarray(im_arr, mode="LA")
+    print(type(im))
 
     filename = filedialog.asksaveasfile(mode='wb', defaultextension=".png")
 
@@ -186,12 +177,12 @@ def main():
     """
 
     im = input_image()
-    im_arr = process_image_to_LA_array(im)
-    im_arr = shadow_crusher(im_arr)
-    im_arr = process_signature(im_arr)
-    output_im_array = alias(im_arr)
+    #im_arr = process_image_to_LA_array(im)
+    #im_arr = shadow_crusher(im_arr)
+    im_arr = process_signature(im)
+    #output_im_array = alias(im_arr)
 
-    save_to_file(output_im_array)
+    save_to_file(im_arr)
 
 
 if __name__ == "__main__":
