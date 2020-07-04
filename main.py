@@ -48,8 +48,8 @@ def process_image_to_LA_array(im):
 
 def threshold_image(im_arr, threshold = 204):
     l_channel = im_arr[:,:,0]
-    row_indices, col_indices = np.where(l_channel > threshold)
-    im_arr[row_indices,col_indices, 1] = 0
+    row_indices, col_indices = np.where(l_channel < threshold)
+    im_arr[row_indices,col_indices, 1] = 255
     return im_arr
 
 
@@ -162,9 +162,8 @@ def main():
 
     im = input_image()
     im_arr = process_image_to_LA_array(im)
-    #shadow_crushed_im_arr = shadow_crusher(im_arr)
-    thresholded_im_arr = threshold_image(im_arr)
-    # Add step to manipulate alpha channel
+    shadow_crushed_im_arr = shadow_crusher(im_arr)
+    thresholded_im_arr = threshold_image(shadow_crushed_im_arr)
     #aliased_im_array = alias(thresholded_im_arr)
     save_to_file(thresholded_im_arr)
 
