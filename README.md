@@ -1,9 +1,9 @@
 # Signature
-Have you ever been in a situation in which you wanted to include a picture of your signature in a document, but were held back due to this?
+Have you ever been in a situation where you wanted to include a picture of your signature in a document, but were held back due to this?
 
 ![](images/orignal.png)
 
-That's where `Signature` comes in. Using python, we built a simple utility that does one job. Take a look!
+That's where `Signature` comes in. Using python, we built a simple utility that does the job. Take a look!
 
 ![](images/processed.png)
 
@@ -23,7 +23,7 @@ On Debian-based Linux in terminal:
 * Run `sudo apt-get install python3.6-tk`
 * Run `sudo apt-get install python3-opencv`
 
-*Note:* For develoment and testing, we used `Tkinter 8.6`, `Pillow 7.1.2`, `Open CV 4.2.0`,`Python 3.7.4` and `Numpy 1.18.4`.
+**Note:** For develoment and testing, we used `Tkinter 8.6`, `Pillow 7.1.2`, `Open CV 4.2.0`,`Python 3.7.4` and `Numpy 1.18.4`.
 
 ### Running
 
