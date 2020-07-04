@@ -49,7 +49,7 @@ def process_image_to_LA_array(im):
 def threshold_image(im_arr, threshold = 204):
     l_channel = im_arr[:,:,0]
     row_indices, col_indices = np.where(l_channel < threshold)
-    im_arr[row_indices,col_indices, 1] = 255
+    im_arr[row_indices,col_indices] = [0,255]
     return im_arr
 
 
