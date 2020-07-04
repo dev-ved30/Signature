@@ -138,7 +138,7 @@ def shadow_crusher(im_arr):
         result_norm_planes.append(norm_img)
 
     result_norm = cv.merge(result_norm_planes)
-    
+
     return result_norm
 
 
@@ -148,8 +148,6 @@ def alias(im_arr):
     due to the thresholding. 
 
     Steps:
-
-    Thresholding: Converts Image to a black and white one using the second parameter as the threshold.
 
     Pyr Up: Increases the image to twice it's orignal size using the image pyramid methodology
 
