@@ -164,7 +164,7 @@ def main():
     im_arr = process_image_to_LA_array(im)
     shadow_crushed_im_arr = shadow_crusher(im_arr)
     thresholded_im_arr = threshold_image(shadow_crushed_im_arr)
-    #aliased_im_array = alias(thresholded_im_arr)
+    aliased_im_array = alias(thresholded_im_arr)
     save_to_file(thresholded_im_arr)
 
 if __name__ == "__main__":
