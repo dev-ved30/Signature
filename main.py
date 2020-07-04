@@ -2,6 +2,7 @@ from tkinter import Tk
 from tkinter import filedialog
 import numpy as np
 import cv2 as cv
+from PIL import Image
 
 
 def input_image():
@@ -24,19 +25,32 @@ def input_image():
             ("PNG files",
              "*.jpg")))
     if root.filename:
-        im_arr = cv.imread(root.filename, cv.IMREAD_GRAYSCALE)
+        im = Image.open(root.filename)
     else:
         print("No image was chosen")
         exit(1)
+    return im
+
+def process_image_to_LA_array(im):
+    """
+    This function converts the image to LA mode if it wasn't already and
+    then converts the image into its nd array representation.
+    Args:
+        im (PIL Image): The image to convert to an nd array in LA format
+    Returns:
+        Numpy array: An nd numpy array. In this case each pixel position has a depth of 2 including the alpha channel.
+    """
+
+    im = im.convert("LA")
+    im_arr = np.array(im)
     return im_arr
 
 
-def g_threshold_image(im_arr):
-    # Add comments when function is finalized
-
-    gt_im_arr = cv.adaptiveThreshold(
-        im_arr, 255, cv.ADAPTIVE_THRESH_GAUSSIAN_C, cv.THRESH_BINARY, 11, 2)
-    return gt_im_arr
+def threshold_image(im_arr, threshold = 204):
+    l_channel = im_arr[:,:,0]
+    row_indices, col_indices = np.where(l_channel > threshold)
+    im_arr[row_indices,col_indices, 1] = 0
+    return im_arr
 
 
 def save_to_file(im_arr):
@@ -47,13 +61,13 @@ def save_to_file(im_arr):
         im_arr (Numpy array): The image to be saved
     """
 
+    im = Image.fromarray(im_arr, mode="LA")
+
     filename = filedialog.asksaveasfile(mode='wb', defaultextension=".png")
 
     if filename:
-        cv.imwrite(filename.name, im_arr)
-        cv.imshow('Output', im_arr)
-        cv.waitKey(0)
-        cv.destroyAllWindows()
+        im.save(filename)
+        im.show()
     else:
         print("No save location was chosen")
         exit(1)
@@ -146,14 +160,13 @@ def main():
     saves it to a file.
     """
 
-    im_arr = input_image()
-    shadow_crushed_im_arr = shadow_crusher(im_arr)
-    # Gaussian Looks terrible on the Git example image
-    thresholded_im_arr = g_threshold_image(shadow_crushed_im_arr)
+    im = input_image()
+    im_arr = process_image_to_LA_array(im)
+    #shadow_crushed_im_arr = shadow_crusher(im_arr)
+    thresholded_im_arr = threshold_image(im_arr)
     # Add step to manipulate alpha channel
-    aliased_im_array = alias(thresholded_im_arr)
-    save_to_file(aliased_im_array)
-
+    #aliased_im_array = alias(thresholded_im_arr)
+    save_to_file(thresholded_im_arr)
 
 if __name__ == "__main__":
     main()
