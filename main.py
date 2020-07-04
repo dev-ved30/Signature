@@ -31,6 +31,7 @@ def input_image():
         exit(1)
     return im
 
+
 def process_image_to_LA_array(im):
     """
     This function converts the image to LA mode if it wasn't already and
@@ -46,10 +47,25 @@ def process_image_to_LA_array(im):
     return im_arr
 
 
-def threshold_image(im_arr, threshold = 204):
-    l_channel = im_arr[:,:,0]
+def threshold_image(im_arr, threshold=204):
+    """
+    This function accepts an image array and sets all pixels in the grescale channel below the threshold value
+    to black.The blackend pixels' alpha channel is set to 255 as well.
+
+    Args:
+        im_arr (Numpy ndarray): The array representing the image in LA. IMPORTANT NOTE: The image must have it's entire alpha channel set
+        to 0 before being passed to this function.
+
+        threshold (int, optional): Pixels in the greyscale whose value is below this are set to 0. Defaults to 204.
+
+    Returns:
+        Numpy array: The thresholded image.
+    """
+    l_channel = im_arr[:, :, 0]  # Extract the greyscale channel
+    # Find positions of pixels whose value is below threshold
     row_indices, col_indices = np.where(l_channel < threshold)
-    im_arr[row_indices,col_indices] = [0,255]
+    # Set to black with no transparency
+    im_arr[row_indices, col_indices] = [0, 255]
     return im_arr
 
 
@@ -166,6 +182,7 @@ def main():
     thresholded_im_arr = threshold_image(shadow_crushed_im_arr)
     aliased_im_array = alias(thresholded_im_arr)
     save_to_file(thresholded_im_arr)
+
 
 if __name__ == "__main__":
     main()
