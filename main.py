@@ -50,34 +50,36 @@ def process_image_to_LA_array(im):
 def threshold_image(im_arr, threshold=204):
     """
     This function accepts an image array and sets all pixels in the grescale channel below the threshold value
-    to black.The blackend pixels' alpha channel is set to 255 as well.
+    to black. The blackend pixels' alpha channel is set to 255 as well.
 
     Modifications are executed "in place" (by reference)
 
-    Note: This function recieves the shadow crushed image with a tansparent alpha channel. It then checks which 
-    pixels are below the threshold value and then converts those pixels to black and opaque.
+    Note: This function first modifies the image to have a completely tansparent alpha channel (values = 0). It then checks which
+    pixels in greyscale are below the threshold value and then converts them to black and opaque.
 
     Args:
-        im_arr (Numpy ndarray): The array representing the image in LA. IMPORTANT NOTE: The image must have it's entire alpha channel set
-        to 0 before being passed to this function.
+        im_arr (Numpy array): The array representing the image in LA.
 
-        threshold (int, optional): Pixels in the greyscale whose value is below this are set to 0. Defaults to 204.
+        threshold (int, optional): Pixels in the greyscale whose values are below this threshold are set to [0,255]. Threshold to 204.
 
     Returns:
         Numpy array: The thresholded image.
     """
+
+    im_arr[:, :, 1] = 0  # setting the entire alpha channel to 0
 
     l_channel = im_arr[:, :, 0]  # Extract the greyscale channel
     # Find positions of pixels whose value is below threshold
     row_indices, col_indices = np.where(l_channel < threshold)
     # Set to black with no transparency
     im_arr[row_indices, col_indices] = [0, 255]
+
     return im_arr
 
 
 def save_to_file(im_arr):
     """
-    Saves the given image to a file through a dialogbox
+    Saves the given image to a file through the OS filedialog.
 
     Args:
         im_arr (Numpy array): The image to be saved
@@ -100,60 +102,53 @@ def shadow_crusher(im_arr):
     This function takes the numpy LA array of an image and removes the shadows.
     It returns a normalised image in the form of an array.
 
+    Modifications to the greyscale channel are made in-place.
+
     Steps:
 
-    Split: Changes mutlichannel image to 2 seperate single channel Images
+    Extract: Extract the greyscale channel and perform the following on it.
 
-    Dilation: This uses pixel clusters to dilate the image. It replaces the 
-    parts of the image where content appears with white squares that are 7 by 7
-    pixels which helps remove the content while preserving the shadows
+    Dilation: This uses pixel clusters to dilate the channel. It replaces the
+    parts of the channel where content appears with white squares that are 7 by 7
+    pixels which helps remove the content while preserving the shadows.
 
-    Median Blur: This blurs or smoothens the dilated image. As a result,
-    the places from where the content is removed does not appear to be 
+    Median Blur: This blurs or smoothens the dilated channel. As a result,
+    the places from where the content is removed do not appear to be
     pixelated. The aperture size is 21.
 
-    Absolute Difference: This compares the orignal image with the blurred one,
+    Absolute Difference: This compares the orignal channel with the blurred one,
     pixel by pixel. If the difference between those is 255, which it would be for
     pixels containing content, diff_image is assigned the value 0, which would make
     those pixels black. Else, the pixel will get a whiter shade due to the difference.
 
-    Normalize: Normalizes the image to use the entire 8 bit range. alpha is the lower
+    Normalize: Normalizes the channel to use the entire 8 bit range. alpha is the lower
     boundary while beta is the upper one. It makes light parts of the image lighter and
-    dark part darker. This makes it easier to work with higher thresholds in the 
+    dark part darker. This makes it easier to work with higher thresholds in the
     process_signature function.
 
-    Merge: Merges the different channels of the image into a single image.
+    Set: Set the image's greyscale channel equal to the normalized channel
 
     Args:
-        img (numpy array): Image for which that shadow needs to be removed
+        img (Numpy array): Image for which that shadow needs to be removed
 
     Returns:
-        [numpy array]: Normalized Image with the shadows removed or flattened.
+        Numpy array: Normalized Image with the shadows removed or flattened.
     """
-    la_planes = cv.split(im_arr)
-    plane = la_planes[0]
-    plane_alpha = la_planes[1]
+    l_plane = im_arr[:, :, 0]
 
-    # Alpha channel is converted to a completely transparent layer
-    plane_alpha[:,:] = 0
-
-    #Shadow crushing is only applied to the grey scale layer
-    dilated_img = cv.dilate(plane, np.ones((7, 7), np.uint8))
+    dilated_img = cv.dilate(l_plane, np.ones((7, 7), np.uint8))
     bg_img = cv.medianBlur(dilated_img, 21)
-    diff_img = 255 - cv.absdiff(plane, bg_img)
-    norm_img = cv.normalize(
+    diff_img = 255 - cv.absdiff(l_plane, bg_img)
+    im_arr[:, :, 0] = cv.normalize(
         diff_img, None, alpha=0, beta=255, norm_type=cv.NORM_MINMAX, dtype=cv.CV_8UC1)
 
-    result_norm_planes = [norm_img, plane_alpha]
-    result_norm = cv.merge(result_norm_planes)
-
-    return result_norm
+    return im_arr
 
 
 def alias(im_arr):
     """
-    This function takes an image as a numpy array and smoothens the jaggy edges that are caused 
-    due to the thresholding. 
+    This function takes an image as a numpy array and smoothens the jaggy edges that are caused
+    due to the thresholding.
 
     Steps:
 
@@ -167,7 +162,7 @@ def alias(im_arr):
         img (numpy array): Image that needs to be smoothened
 
     Returns:
-        numpy array: Smoothened image
+        Numpy array: Smoothened image
     """
 
     img_blur = cv.pyrUp(im_arr)
