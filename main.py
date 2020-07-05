@@ -54,6 +54,9 @@ def threshold_image(im_arr, threshold=204):
 
     Modifications are executed "in place" (by reference)
 
+    Note: This function recieves the shadow crushed image with a tansparent alpha channel. It then checks which 
+    pixels are below the threshold value and then converts those pixels to black and opaque.
+
     Args:
         im_arr (Numpy ndarray): The array representing the image in LA. IMPORTANT NOTE: The image must have it's entire alpha channel set
         to 0 before being passed to this function.
@@ -63,6 +66,7 @@ def threshold_image(im_arr, threshold=204):
     Returns:
         Numpy array: The thresholded image.
     """
+
     l_channel = im_arr[:, :, 0]  # Extract the greyscale channel
     # Find positions of pixels whose value is below threshold
     row_indices, col_indices = np.where(l_channel < threshold)
@@ -127,16 +131,20 @@ def shadow_crusher(im_arr):
         [numpy array]: Normalized Image with the shadows removed or flattened.
     """
     la_planes = cv.split(im_arr)
+    plane = la_planes[0]
+    plane_alpha = la_planes[1]
 
-    result_norm_planes = []
-    for plane in la_planes:
-        dilated_img = cv.dilate(plane, np.ones((7, 7), np.uint8))
-        bg_img = cv.medianBlur(dilated_img, 21)
-        diff_img = 255 - cv.absdiff(plane, bg_img)
-        norm_img = cv.normalize(
-            diff_img, None, alpha=0, beta=255, norm_type=cv.NORM_MINMAX, dtype=cv.CV_8UC1)
-        result_norm_planes.append(norm_img)
+    # Alpha channel is converted to a completely transparent layer
+    plane_alpha[:,:] = 0
 
+    #Shadow crushing is only applied to the grey scale layer
+    dilated_img = cv.dilate(plane, np.ones((7, 7), np.uint8))
+    bg_img = cv.medianBlur(dilated_img, 21)
+    diff_img = 255 - cv.absdiff(plane, bg_img)
+    norm_img = cv.normalize(
+        diff_img, None, alpha=0, beta=255, norm_type=cv.NORM_MINMAX, dtype=cv.CV_8UC1)
+
+    result_norm_planes = [norm_img, plane_alpha]
     result_norm = cv.merge(result_norm_planes)
 
     return result_norm
