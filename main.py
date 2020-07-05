@@ -12,7 +12,7 @@ def input_image():
     the terminal otherwise. It reads an image in greyscale.
 
     Returns:
-        Numpy ndarray: Returns ndarray representing the grayscale image.
+        PIL Image: The image read from file
     """
 
     root = Tk()
