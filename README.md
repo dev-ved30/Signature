@@ -15,7 +15,7 @@ That's where `Signature` comes in. Using python, we built a simple utility that 
     
     * Run `pip install -r requirements.txt`
 
-* Otherwise, if you're trying to install the dependencies individually:
+* Otherwise, if it doesn't work on Linux or you're trying to install the dependencies individually:
 
     * On Windows in `cmd`:
 
