@@ -29,7 +29,7 @@ That's where `Signature` comes in. Using python, we built a simple utility that 
         * Run `sudo apt-get install python3.6-tk`
         * Run `sudo apt-get install python3-opencv`
 
-**Note:** For develoment and testing, we used `Tkinter 8.6`, `Pillow 7.1.2`, `Open CV 4.2.0`,`Python 3.7.4` and `Numpy 1.18.4`.
+**Note:** For develoment and testing, we used `Tkinter 8.6`, `Pillow 7.2.0`, `Open CV 4.3.0.36`,`Python 3.7.4` and `Numpy 1.19.0`.
 
 ### Running
 
