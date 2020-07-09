@@ -9,7 +9,7 @@ That's where `Signature` comes in. Using python, we built a simple utility that 
 
 ## Using Locally
 
-### Before Running (Assuming you have pip and git)
+### Before Running (Assuming you have pip, git and an appropriate version of python)
 
 * If you're not worried about breaking anything in your environment:
     
