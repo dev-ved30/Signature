@@ -15,21 +15,12 @@ That's where `Signature` comes in. Using python, we built a simple utility that 
     
     * Run `pip install -r requirements.txt`
 
-* Otherwise, if it doesn't work on Linux or you're trying to install the dependencies individually:
+* Otherwise, if you're trying to install the dependencies individually:
+    * Run `pip install numpy`
+    * Run `pip install Pillow`
+    * Run `pip install opencv-python`
 
-    * On Windows in `cmd`:
-
-        * Run `pip install numpy`
-        * Run `pip install Pillow`
-        * Run `pip install opencv-python`
-
-    * On Debian-based Linux in terminal:
-        * Run `pip install numpy`
-        * Run `pip install Pillow`
-        * Run `sudo apt-get install python3.6-tk`
-        * Run `sudo apt-get install python3-opencv`
-
-**Note:** For develoment and testing, we used `Tkinter 8.6`, `Pillow 7.2.0`, `Open CV 4.3.0.36`,`Python 3.7.4` and `Numpy 1.19.0`.
+**Note:** For develoment and testing, we used `Python 3.7.x`, `Pillow 7.2.0`, `Open CV 4.3.0.36`, and `Numpy 1.19.0`.
 
 ### Running
 
