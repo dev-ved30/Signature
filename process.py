@@ -94,6 +94,20 @@ def save_to_file(im_arr):
         print("No save location was chosen")
         exit(1)
 
+def save_to_temp(im_arr):
+    """
+    Saves the given image to a file through the OS filedialog.
+
+    Args:
+        im_arr (Numpy array): The image to be saved
+    """
+
+    im = Image.fromarray(im_arr, mode="LA")
+
+    temp_file = open("temp.png", "wb")
+
+    im.save(temp_file)
+
 
 def shadow_crusher(im_arr):
     """

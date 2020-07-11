@@ -3,27 +3,51 @@ from kivy.app import App
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.button import Button
 from kivy.uix.label import Label
+from kivy.uix.slider import Slider
+from kivy.uix.image import Image as KImage
+from kivy.core.window import Window
 from process import *
+
+Window.size = (1440, 900)
 
 
 class SignatureFloat(FloatLayout):
     def __init__(self, **kwargs):
         super(SignatureFloat, self).__init__(**kwargs)
 
+        self.welcome_label = Label(
+            text="Welcome to signature :)",
+            font_size=50,
+            size_hint=(0.5, 0.5),
+            pos_hint={"x": 0.25, "y": 0.35},
+        )
+        self.add_widget(self.welcome_label)
         self.choose_button = Button(
             text="Choose an image",
             font_size=32,
-            size_hint=(0.5, 0.5),
-            pos_hint={"x": 0.25, "y": 0.25},
+            size_hint=(0.5, 0.25),
+            pos_hint={"x": 0.25, "y": 0.05},
         )
         self.choose_button.bind(on_press=self.choose_and_prepare_image)
         self.add_widget(self.choose_button)
 
     def choose_and_prepare_image(self, instance):
-        im = input_image()
+        im= input_image()
         self.im_arr = process_image_to_LA_array(im)
         self.im_arr = shadow_crusher(self.im_arr)
+
         self.remove_widget(self.choose_button)
+        self.remove_widget(self.welcome_label)
+
+        save_to_temp(self.im_arr)
+
+        self.temp_img = KImage(
+            source="temp.png", size_hint=(0.5, 0.5), pos_hint={"x": 0.25, "y": 0.25}
+        )        
+        self.add_widget(self.temp_img)
+        self.slider = Slider(min=0, max=255, value=200, size_hint=(0.60, 0.20), pos_hint={"x": 0.05, "y": 0.05})
+        self.add_widget(self.slider)
+
         self.process_image()
 
     def process_image(self):
@@ -32,14 +56,16 @@ class SignatureFloat(FloatLayout):
 
         self.final_im_arr = threshold_image(self.im_arr)
         self.final_im_arr = alias(self.final_im_arr)
+        save_to_temp(self.final_im_arr)
+        self.temp_img.reload()
 
         self.remove_widget(label)
 
         self.save_button = Button(
             text="Save image",
             font_size=32,
-            size_hint=(0.5, 0.5),
-            pos_hint={"x": 0.25, "y": 0.25},
+            size_hint=(0.25, 0.20),
+            pos_hint={"x": 0.70, "y": 0.05},
         )
         self.save_button.bind(on_press=self.save_image)
         self.add_widget(self.save_button)
