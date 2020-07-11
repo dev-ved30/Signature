@@ -8,6 +8,7 @@ from kivy.uix.image import Image as KImage
 from kivy.core.window import Window
 from process import *
 
+Window.clearcolor = (1,1,1,1)
 Window.size = (1440, 900)
 
 
@@ -18,6 +19,7 @@ class SignatureFloat(FloatLayout):
         self.welcome_label = Label(
             text="Welcome to signature :)",
             font_size=50,
+            color = (0,0,0,1),
             size_hint=(0.5, 0.5),
             pos_hint={"x": 0.25, "y": 0.35},
         )
@@ -46,18 +48,25 @@ class SignatureFloat(FloatLayout):
         )        
         self.add_widget(self.temp_img)
         self.slider = Slider(min=0, max=255, value=200, size_hint=(0.60, 0.20), pos_hint={"x": 0.05, "y": 0.05})
+        self.slider.bind(on_touch_up=self.slider_update)
+        self.slider.bind(on_touch_down=self.slider_update)
         self.add_widget(self.slider)
 
-        self.process_image()
+        self.process_image(200)
+    
+    def slider_update(self, instance, touch):
+        threshold = self.slider.value
+        self.process_image(threshold)
+        self.temp_img.reload()
 
-    def process_image(self):
+
+    def process_image(self, thresh):
         label = Label(text="Processing...", font_size=50)
         self.add_widget(label)
 
-        self.final_im_arr = threshold_image(self.im_arr)
+        self.final_im_arr = threshold_image(self.im_arr, threshold=thresh)
         self.final_im_arr = alias(self.final_im_arr)
         save_to_temp(self.final_im_arr)
-        self.temp_img.reload()
 
         self.remove_widget(label)
 
