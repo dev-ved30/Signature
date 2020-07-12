@@ -104,7 +104,7 @@ def save_to_temp(im_arr):
 
     im = Image.fromarray(im_arr, mode="LA")
 
-    temp_file = open("temp.png", "wb")
+    temp_file = open(".temp.png", "wb")
 
     im.save(temp_file)
 

@@ -1,4 +1,5 @@
 import kivy
+import os
 from kivy.app import App
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.button import Button
@@ -117,3 +118,4 @@ if __name__ == "__main__":
     Window.clearcolor = RGBA_to_kvRGBA((193, 199, 198, 255))
     Window.size = (1440, 900)
     SignatureApp().run()
+    os.remove(".temp.png")
