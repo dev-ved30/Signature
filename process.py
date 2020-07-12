@@ -94,6 +94,7 @@ def save_to_file(im_arr):
         print("No save location was chosen")
         exit(1)
 
+
 def save_to_temp(im_arr):
     """
     Saves the given image to a file through the OS filedialog.
