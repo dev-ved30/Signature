@@ -1,191 +1,207 @@
-from tkinter import Tk
-from tkinter import filedialog
-import numpy as np
-import cv2 as cv
-from PIL import Image
+import kivy
+import os
+from kivy.app import App
+from kivy.uix.floatlayout import FloatLayout
+from kivy.uix.button import Button
+from kivy.uix.label import Label
+from kivy.uix.slider import Slider
+from kivy.uix.image import Image as KImage
+from kivy.core.window import Window
+from process import *
 
 
-def input_image():
+def RGBA_to_kvRGBA(RGBA_tup):
     """
-    This function asks the user to input a file through the standard OS
-    filewindow. It only accepts PNG and JPG files and will print and error to
-    the terminal otherwise. It reads an image in greyscale.
-
-    Returns:
-        PIL Image: The image read from file
-    """
-
-    root = Tk()
-    root.filename = filedialog.askopenfilename(
-        initialdir="/$HOME/",
-        title="Select file",
-        filetypes=(
-            ("PNG files",
-             "*.png"),
-            ("PNG files",
-             "*.jpg")))
-    if root.filename:
-        im = Image.open(root.filename)
-    else:
-        print("No image was chosen")
-        exit(1)
-    return im
-
-
-def process_image_to_LA_array(im):
-    """
-    This function converts the image to LA mode if it wasn't already and
-    then converts the image into its nd array representation.
-    Args:
-        im (PIL Image): The image to convert to an nd array in LA format
-    Returns:
-        Numpy array: An nd numpy array. In this case each pixel position has a depth of 2 including the alpha channel.
-    """
-
-    im = im.convert("LA")
-    im_arr = np.array(im)
-    return im_arr
-
-
-def threshold_image(im_arr, threshold=204):
-    """
-    This function accepts an image array and sets all pixels in the grescale channel below the threshold value
-    to black. The blackend pixels' alpha channel is set to 255 as well.
-
-    Modifications are executed "in place" (by reference)
-
-    Note: This function first modifies the image to have a completely tansparent alpha channel (values = 0). It then checks which
-    pixels in greyscale are below the threshold value and then converts them to black and opaque.
+    Converts normal RGBA values into Kivy's relative representation and returns the converted tuple.
 
     Args:
-        im_arr (Numpy array): The array representing the image in LA.
-
-        threshold (int, optional): Pixels in the greyscale whose values are below this threshold are set to [0,255]. Threshold to 204.
+        RGBA_tup (tuple): The tuple of standard RGBA values
 
     Returns:
-        Numpy array: The thresholded image.
+        tuple: Kivy's representation of RGBA values
+    """
+    retval = (
+        RGBA_tup[0] / 255,
+        RGBA_tup[1] / 255,
+        RGBA_tup[2] / 255,
+        RGBA_tup[3] / 255,
+    )
+    return retval
+
+
+class SignatureFloat(FloatLayout):
+    def __init__(self, **kwargs):
+        """Initializes the Float window for the app
+        """
+        super(SignatureFloat, self).__init__(**kwargs)
+
+        self.orig_im = None
+        self.temp_img = None
+
+        self.start()
+
+    def start(self):
+        """The window to get the process started.
+        """
+        self.add_welcome_label()
+        self.add_choose_srcImage_button()
+
+    def choose_image(self, instance):
+        """
+        This function is called when the user clicks the choose image button.
+
+        Args:
+            instance: The instance of the button that is passed in. 
+        """
+        self.orig_im = input_image()
+
+        # Get rid of the stuff from the start screen
+        self.remove_widget(self.choose_button)
+        self.remove_widget(self.welcome_label)
+
+        # Prepare the things we want to display next
+        self.add_slider()
+        self.add_save_image_button()
+        self.add_processing_label()
+
+        # The first time we call process_image we set threshold to 200
+        self.process_image(200)
+
+    def slider_update(self, instance, touch):
+        """
+        This function is called when the user clicks away from the slider.
+
+        Args:
+            instance : Instance of the slider being used
+            touch : The coordinates that were clicked
+        """
+        # Get and use the threshold value to reprocess the image with the user's threshold
+        threshold = self.slider.value
+        self.process_image(threshold)
+
+    def process_image(self, thresh):
+        """
+        Processes the image with the given threshold value.
+
+        Args:
+            thresh (float): The threshold value to process the image based on
+        """
+
+        # Process the image
+        self.im_arr = process_image_to_LA_array(self.orig_im)
+        self.im_arr = shadow_crusher(self.im_arr)
+        self.final_im_arr = threshold_image(self.im_arr, threshold=thresh)
+        self.final_im_arr = alias(self.final_im_arr)
+
+        # Save to the temporary file internally
+        save_to_temp(self.final_im_arr)
+        self.remove_widget(self.label)
+
+        if self.temp_img is None:
+            # If this is the first time the function is called, add the temporary image
+            self.add_temp_image()
+        else:
+            # Reload the image everytime the threshold is modified
+            # Reloading reloads from the temporary image we update internally
+            self.temp_img.reload()
+
+    def save_image(self, instance):
+        """
+        Called when the user clicks the save image button.
+
+        Args:
+            instance : Instance of the calling button
+        """
+        save_to_file(self.final_im_arr)
+
+    def add_temp_image(self):
+        """Adds a temporary image for the class to keep track of. This image is used to update the
+        real time representation the user sees.
+        """
+        self.temp_img = KImage(
+            source=".temp.png", size_hint=(0.80, 0.5), pos_hint={"x": 0.10, "y": 0.40}
+        )
+        self.add_widget(self.temp_img)
+
+    def add_welcome_label(self):
+        """
+        Adds the welcome label used for the start screen.
+        """
+        self.welcome_label = Label(
+            text="Welcome to signature :)",
+            font_size=80,
+            color=RGBA_to_kvRGBA((0, 0, 0, 255)),
+            size_hint=(0.5, 0.5),
+            pos_hint={"x": 0.25, "y": 0.35},
+        )
+        self.add_widget(self.welcome_label)
+
+    def add_choose_srcImage_button(self):
+        """Adds the button the user needs to click on the start screen to choose an image.
+        """
+        self.choose_button = Button(
+            text="Choose an image",
+            font_size=32,
+            size_hint=(0.5, 0.25),
+            pos_hint={"x": 0.25, "y": 0.05},
+            background_normal="",
+            background_color=RGBA_to_kvRGBA((86, 186, 190, 255)),
+        )
+        self.choose_button.bind(on_press=self.choose_image)
+        self.add_widget(self.choose_button)
+
+    def add_save_image_button(self):
+        """Adds the button used to save an image.
+        """
+        self.save_button = Button(
+            text="Save image",
+            font_size=32,
+            size_hint=(0.25, 0.20),
+            pos_hint={"x": 0.70, "y": 0.05},
+            background_normal="",
+            background_color=RGBA_to_kvRGBA((86, 186, 190, 255)),
+        )
+        self.save_button.bind(on_press=self.save_image)
+        self.add_widget(self.save_button)
+
+    def add_processing_label(self):
+        """Adds the label that is shown while the image is being processed.
+        """
+        self.label = Label(
+            text="Processing...", font_size=80, color=RGBA_to_kvRGBA((0, 0, 0, 255))
+        )
+        self.add_widget(self.label)
+
+    def add_slider(self):
+        """Adds the sldie the user uses to adjust the threshold.
+        """
+        self.slider = Slider(
+            min=0,
+            max=255,
+            value=200,
+            size_hint=(0.60, 0.20),
+            pos_hint={"x": 0.05, "y": 0.05},
+        )
+        self.slider.bind(on_touch_up=self.slider_update)
+        self.add_widget(self.slider)
+
+
+class SignatureApp(App):
+    """The app for Signature backed by a Float layout
     """
 
-    im_arr[:, :, 1] = 0  # setting the entire alpha channel to 0
-
-    l_channel = im_arr[:, :, 0]  # Extract the greyscale channel
-    # Find positions of pixels whose value is below threshold
-    row_indices, col_indices = np.where(l_channel < threshold)
-    # Set to black with no transparency
-    im_arr[row_indices, col_indices] = [0, 255]
-
-    return im_arr
-
-
-def save_to_file(im_arr):
-    """
-    Saves the given image to a file through the OS filedialog.
-
-    Args:
-        im_arr (Numpy array): The image to be saved
-    """
-
-    im = Image.fromarray(im_arr, mode="LA")
-
-    filename = filedialog.asksaveasfile(mode='wb', defaultextension=".png")
-
-    if filename:
-        im.save(filename)
-        im.show()
-    else:
-        print("No save location was chosen")
-        exit(1)
-
-
-def shadow_crusher(im_arr):
-    """
-    This function takes the numpy LA array of an image and removes the shadows.
-    It returns a normalised image in the form of an array.
-
-    Modifications to the greyscale channel are made in-place.
-
-    Steps:
-
-    Extract: Extract the greyscale channel and perform the following on it.
-
-    Dilation: This uses pixel clusters to dilate the channel. It replaces the
-    parts of the channel where content appears with white squares that are 7 by 7
-    pixels which helps remove the content while preserving the shadows.
-
-    Median Blur: This blurs or smoothens the dilated channel. As a result,
-    the places from where the content is removed do not appear to be
-    pixelated. The aperture size is 21.
-
-    Absolute Difference: This compares the orignal channel with the blurred one,
-    pixel by pixel. If the difference between those is 255, which it would be for
-    pixels containing content, diff_image is assigned the value 0, which would make
-    those pixels black. Else, the pixel will get a whiter shade due to the difference.
-
-    Normalize: Normalizes the channel to use the entire 8 bit range. alpha is the lower
-    boundary while beta is the upper one. It makes light parts of the image lighter and
-    dark part darker. This makes it easier to work with higher thresholds in the
-    process_signature function.
-
-    Set: Set the image's greyscale channel equal to the normalized channel
-
-    Args:
-        img (Numpy array): Image for which that shadow needs to be removed
-
-    Returns:
-        Numpy array: Normalized Image with the shadows removed or flattened.
-    """
-    l_plane = im_arr[:, :, 0]
-
-    dilated_img = cv.dilate(l_plane, np.ones((7, 7), np.uint8))
-    bg_img = cv.medianBlur(dilated_img, 21)
-    diff_img = 255 - cv.absdiff(l_plane, bg_img)
-    im_arr[:, :, 0] = cv.normalize(
-        diff_img, None, alpha=0, beta=255, norm_type=cv.NORM_MINMAX, dtype=cv.CV_8UC1)
-
-    return im_arr
-
-
-def alias(im_arr):
-    """
-    This function takes an image as a numpy array and smoothens the jaggy edges that are caused
-    due to the thresholding.
-
-    Steps:
-
-    Pyr Up: Increases the image to twice it's orignal size using the image pyramid methodology
-
-    Median Blur: Blurs the image images to soften the edges
-
-    Pyr Down: Decreases the image to half it's sized up version using the image pyramid methodology
-
-    Args:
-        img (numpy array): Image that needs to be smoothened
-
-    Returns:
-        Numpy array: Smoothened image
-    """
-
-    img_blur = cv.pyrUp(im_arr)
-    img_blur = cv.medianBlur(img_blur, 3)
-    img_blur = cv.pyrDown(img_blur)
-    return img_blur
-
-
-def main():
-    """
-    The directive method that runs the application.
-
-    It reads an image, preprocesses it, then processes it and finally
-    saves it to a file.
-    """
-
-    im = input_image()
-    im_arr = process_image_to_LA_array(im)
-    shadow_crushed_im_arr = shadow_crusher(im_arr)
-    thresholded_im_arr = threshold_image(shadow_crushed_im_arr)
-    aliased_im_array = alias(thresholded_im_arr)
-    save_to_file(aliased_im_array)
+    def build(self):
+        return SignatureFloat()
 
 
 if __name__ == "__main__":
-    main()
+
+    # Make the root window grey and set its resolution to be 1440x900
+    Window.clearcolor = RGBA_to_kvRGBA((193, 199, 198, 255))
+    Window.size = (1440, 900)
+
+    # Run the app
+    SignatureApp().run()
+
+    # Delete the temporary file after each run
+    os.remove(".temp.png")

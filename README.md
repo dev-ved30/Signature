@@ -12,13 +12,16 @@ That's where `Signature` comes in. Using python, we built a simple utility that 
 ### Before Running (Assuming you have pip, git and an appropriate version of python)
 
 * If you're not worried about breaking anything in your environment:
-    
-    * Run `pip install -r requirements.txt`
+    * On Windows:
+        * Run `pip install -r win_requirements.txt`
+    * On MacOS/Linux:
+        * Run `pip install -r unix_requirements.txt`
 
 * Otherwise, if you're trying to install the dependencies individually:
     * Run `pip install numpy`
     * Run `pip install Pillow`
     * Run `pip install opencv-python`
+    * Install Kivy. Refer to the relevant OS instructions [here](https://kivy.org/#download)
 
 **Note:** For develoment and testing, we used `Python 3.7.x`, `Pillow 7.2.0`, `Open CV 4.3.0.36`, and `Numpy 1.19.0`.
 
