@@ -16,6 +16,7 @@ def RGBA_to_kvRGBA(RGBA_tup):
 
 
 class SignatureFloat(FloatLayout):
+
     def __init__(self, **kwargs):
         super(SignatureFloat, self).__init__(**kwargs)
         self.orig_im = None
@@ -57,14 +58,14 @@ class SignatureFloat(FloatLayout):
         save_to_file(self.final_im_arr)
 
     def add_temp_image(self):
-        self.temp_img = KImage(source="temp.png", size_hint=(
-            0.5, 0.5), pos_hint={"x": 0.25, "y": 0.25})
+        self.temp_img = KImage(source=".temp.png", size_hint=(
+            0.80, 0.5), pos_hint={"x": 0.10, "y": 0.40})
         self.add_widget(self.temp_img)
 
     def add_welcome_label(self):
         self.welcome_label = Label(
             text="Welcome to signature :)",
-            font_size=50,
+            font_size=80,
             color=RGBA_to_kvRGBA((0, 0, 0, 255)),
             size_hint=(0.5, 0.5),
             pos_hint={"x": 0.25, "y": 0.35},
@@ -77,6 +78,8 @@ class SignatureFloat(FloatLayout):
             font_size=32,
             size_hint=(0.5, 0.25),
             pos_hint={"x": 0.25, "y": 0.05},
+            background_normal='',
+            background_color=RGBA_to_kvRGBA((86, 186, 190, 255))
         )
         self.choose_button.bind(on_press=self.choose_image)
         self.add_widget(self.choose_button)
@@ -87,12 +90,15 @@ class SignatureFloat(FloatLayout):
             font_size=32,
             size_hint=(0.25, 0.20),
             pos_hint={"x": 0.70, "y": 0.05},
+            background_normal='',
+            background_color=RGBA_to_kvRGBA((86, 186, 190, 255))
         )
         self.save_button.bind(on_press=self.save_image)
         self.add_widget(self.save_button)
 
     def add_processing_label(self):
-        self.label = Label(text="Processing...", font_size=50)
+        self.label = Label(text="Processing...", font_size=80,
+                           color=RGBA_to_kvRGBA((0, 0, 0, 255)))
         self.add_widget(self.label)
 
     def add_slider(self):
@@ -108,6 +114,6 @@ class SignatureApp(App):
 
 
 if __name__ == "__main__":
-    Window.clearcolor = (1, 1, 1, 1)
+    Window.clearcolor = RGBA_to_kvRGBA((193, 199, 198, 255))
     Window.size = (1440, 900)
     SignatureApp().run()
