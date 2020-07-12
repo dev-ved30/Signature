@@ -34,22 +34,13 @@ class SignatureFloat(FloatLayout):
         self.add_widget(self.choose_button)
 
     def choose_and_prepare_image(self, instance):
-        im= input_image()
-        self.im_arr = process_image_to_LA_array(im)
-        self.im_arr = shadow_crusher(self.im_arr)
-
+        self.orig_im = input_image()
+        self.temp_img = None
         self.remove_widget(self.choose_button)
         self.remove_widget(self.welcome_label)
 
-        save_to_temp(self.im_arr)
-
-        self.temp_img = KImage(
-            source="temp.png", size_hint=(0.5, 0.5), pos_hint={"x": 0.25, "y": 0.25}
-        )        
-        self.add_widget(self.temp_img)
         self.slider = Slider(min=0, max=255, value=200, size_hint=(0.60, 0.20), pos_hint={"x": 0.05, "y": 0.05})
         self.slider.bind(on_touch_up=self.slider_update)
-        self.slider.bind(on_touch_down=self.slider_update)
         self.add_widget(self.slider)
 
         self.process_image(200)
@@ -64,11 +55,23 @@ class SignatureFloat(FloatLayout):
         label = Label(text="Processing...", font_size=50)
         self.add_widget(label)
 
+        self.im_arr = process_image_to_LA_array(self.orig_im)
+        self.im_arr = shadow_crusher(self.im_arr)
         self.final_im_arr = threshold_image(self.im_arr, threshold=thresh)
         self.final_im_arr = alias(self.final_im_arr)
         save_to_temp(self.final_im_arr)
-
+        
         self.remove_widget(label)
+
+        if self.temp_img is None:
+
+
+            self.temp_img = KImage(
+            source="temp.png", size_hint=(0.5, 0.5), pos_hint={"x": 0.25, "y": 0.25}
+            )        
+            self.add_widget(self.temp_img)
+        else:
+            self.temp_img.reload()
 
         self.save_button = Button(
             text="Save image",
