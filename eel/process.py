@@ -3,6 +3,7 @@ from tkinter import filedialog
 import numpy as np
 import cv2 as cv
 from PIL import Image
+import os.path
 
 
 def input_image():
@@ -10,7 +11,6 @@ def input_image():
     This function asks the user to input a file through the standard OS
     filewindow. It only accepts PNG and JPG files and will print and error to
     the terminal otherwise. It reads an image in greyscale.
-
     Returns:
         PIL Image: The image read from file
     """
@@ -28,6 +28,12 @@ def input_image():
         print("No image was chosen")
         exit(1)
     return im
+
+def input_crushed_img():
+    filename = os.path.join("temp/.shadow.png")
+    im = Image.open(filename)
+    return im
+
 
 
 def process_image_to_LA_array(im):
@@ -92,7 +98,7 @@ def save_to_file(im_arr):
         im.show()
     else:
         print("No save location was chosen")
-        exit(1)
+        pass
 
 
 def save_to_temp(im_arr):
@@ -105,7 +111,21 @@ def save_to_temp(im_arr):
 
     im = Image.fromarray(im_arr, mode="LA")
 
-    temp_file = open(".temp.png", "wb")
+    temp_file = open(os.path.join("web/.temp.png"), "wb")
+
+    im.save(temp_file)
+
+def save_shadow_crush(im_arr):
+    """
+    Saves the given image to a file through the OS filedialog.
+
+    Args:
+        im_arr (Numpy array): The image to be saved
+    """
+
+    im = Image.fromarray(im_arr, mode="LA")
+
+    temp_file = open(os.path.join("temp/.shadow.png"), "wb")
 
     im.save(temp_file)
 
@@ -183,3 +203,11 @@ def alias(im_arr):
     img_blur = cv.medianBlur(img_blur, 3)
     img_blur = cv.pyrDown(img_blur)
     return img_blur
+
+def main():
+    im = input_image()
+    im_la = process_image_to_LA_array(im)
+    im_shadow_crush = shadow_crusher(im_la)
+    im_thresh = threshold_image(im_shadow_crush)
+    im_alias = alias(im_thresh)
+    save_to_file(im_alias)
