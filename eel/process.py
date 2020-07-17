@@ -113,6 +113,7 @@ def save_to_file(im_arr):
 
     if filename:
         im.save(filename)
+        print("Final image saved")
         im.show()
     else:
         print("No save location was chosen")
@@ -132,6 +133,7 @@ def save_to_temp(im_arr):
     temp_file = open(os.path.join("web/temp/.temp.png"), "wb")
 
     im.save(temp_file)
+    print("Temp image is saved")
 
 def save_shadow_crush(im_arr):
     """
@@ -146,6 +148,7 @@ def save_shadow_crush(im_arr):
     temp_file = open(os.path.join("web/temp/.shadow.png"), "wb")
 
     im.save(temp_file)
+    print("Shadow Crushed Image is saved")
 
 
 def shadow_crusher(im_arr):
