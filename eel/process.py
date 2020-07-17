@@ -17,6 +17,8 @@ def input_image():
 
     root = Tk()
     root.withdraw()
+    root.attributes("-topmost", True)
+    root.lift()
     root.filename = filedialog.askopenfilename(
         initialdir="/$HOME/",
         title="Select file",
