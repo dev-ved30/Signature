@@ -6,7 +6,7 @@ function process_img() {
 function reprocess() {
 	var threshold = document.getElementById('thresh').value;
 	eel.change_thresh(threshold);
-	console.log('Threshold re-processing is complete');
+	console.log('Threshold re-processing is complete. Threshold is set to ' + threshold);
 	location.reload();
 }
 function save_img() {

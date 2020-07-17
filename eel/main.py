@@ -5,18 +5,30 @@ import eel
 
 @eel.expose
 def process():
+    """
+    This function is exposed to eel. It takes the image from tkinter, processes it and saves the image as a temp.
+    It also saves a copy of the shadow crushed image to prevent redundant computations when the threshold is being
+    tweaked.
+    It also prints updates to the terminal
+    """
     im = input_image()
     im_la = process_image_to_LA_array(im)
     im_shadow_crush = shadow_crusher(im_la)
     save_shadow_crush(im_shadow_crush)
-    print("Saved the shadow crushed function")
+    print("Shadow Crushed Image is saved")
     im_thresh = threshold_image(im_shadow_crush)
     im_alias = alias(im_thresh)
     save_to_temp(im_alias)
-    print("Inital image stored")
+    print("Inital image is saved")
 
 @eel.expose
 def change_thresh(thresh):
+    """
+    This function is exposed to eel. It takes the shadow crushed image saved in the web folder (temp), applies the new threshold, 
+    aliases it and then overwrites the temp image.
+
+    It also prints updates to the terminal
+    """
     im = input_crushed_img()
     im_la = process_image_to_LA_array(im)
     im_thresh = threshold_image(im_la, int(thresh))
@@ -26,10 +38,16 @@ def change_thresh(thresh):
 
 @eel.expose
 def save_final_image():
+    """
+    This function is exposed to eel. It takes the temp image saved in the web folder (temp) and saves it in the user defined location
+    with the user defined name using tkinter.
+
+    It also prints updates to the terminal
+    """
     im = input_temp_img()
     im_la = process_image_to_LA_array(im)
     save_to_file(im_la)
-    print("Final image stored")
+    print("Final image saved")
 
     
 

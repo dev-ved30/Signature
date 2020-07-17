@@ -30,11 +30,23 @@ def input_image():
     return im
 
 def input_crushed_img():
+    """
+    This function opens the shadow crushed image from the temp folder and returns it.
+
+    Returns:
+        image[.png]: shadow crushed image
+    """
     filename = os.path.join("web/temp/.shadow.png")
     im = Image.open(filename)
     return im
 
 def input_temp_img():
+    """
+    This function opens the temp image from the temp folder and returns it.
+
+    Returns:
+        image[.png]: temp image
+    """
     filename = os.path.join("web/temp/.temp.png")
     im = Image.open(filename)
     return im
@@ -107,7 +119,7 @@ def save_to_file(im_arr):
 
 def save_to_temp(im_arr):
     """
-    Saves the given image to a file through the OS filedialog.
+    Saves the given image to the temp file through the OS filedialog.
 
     Args:
         im_arr (Numpy array): The image to be saved
@@ -121,7 +133,7 @@ def save_to_temp(im_arr):
 
 def save_shadow_crush(im_arr):
     """
-    Saves the given image to a file through the OS filedialog.
+    Saves the given image to the shadow file through the OS filedialog.
 
     Args:
         im_arr (Numpy array): The image to be saved
