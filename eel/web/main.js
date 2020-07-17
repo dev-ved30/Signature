@@ -1,5 +1,7 @@
+var x = 10;
+
 function process_img() {
-	eel.process();
+	eel.process_img();
 	console.log('Initial processing is complete');
 	console.log('Redirecting to edit page');
 }

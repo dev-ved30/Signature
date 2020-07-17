@@ -4,7 +4,7 @@ from process import *
 import eel
 
 @eel.expose
-def process():
+def process_img():
     """
     This function is exposed to eel. It takes the image from tkinter, processes it and saves the image as a temp.
     It also saves a copy of the shadow crushed image to prevent redundant computations when the threshold is being
