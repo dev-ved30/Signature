@@ -30,10 +30,14 @@ def input_image():
     return im
 
 def input_crushed_img():
-    filename = os.path.join("temp/.shadow.png")
+    filename = os.path.join("web/temp/.shadow.png")
     im = Image.open(filename)
     return im
 
+def input_temp_img():
+    filename = os.path.join("web/temp/.temp.png")
+    im = Image.open(filename)
+    return im
 
 
 def process_image_to_LA_array(im):
@@ -111,7 +115,7 @@ def save_to_temp(im_arr):
 
     im = Image.fromarray(im_arr, mode="LA")
 
-    temp_file = open(os.path.join("web/.temp.png"), "wb")
+    temp_file = open(os.path.join("web/temp/.temp.png"), "wb")
 
     im.save(temp_file)
 
@@ -125,7 +129,7 @@ def save_shadow_crush(im_arr):
 
     im = Image.fromarray(im_arr, mode="LA")
 
-    temp_file = open(os.path.join("temp/.shadow.png"), "wb")
+    temp_file = open(os.path.join("web/temp/.shadow.png"), "wb")
 
     im.save(temp_file)
 

@@ -23,6 +23,13 @@ def change_thresh(thresh):
     im_thresh = threshold_image(im_la, int(thresh))
     im_alias = alias(im_thresh)
     save_to_temp(im_alias)
+
+@eel.expose
+def save_final_image():
+    im = input_temp_img()
+    im_la = process_image_to_LA_array(im)
+    save_to_file(im_la)
+
     
 
 if __name__=="__main__":

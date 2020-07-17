@@ -23,20 +23,20 @@
     <div class="wrapper fadeInDown">
         <div id="formContent">
           <!-- Tabs Titles -->
-          <form method="post">
+          <form action="home.html">
             <h2 class="active">Make changes to the image</h2>
-            <img src="/./.temp.png">
+            <img src="temp/.temp.png">
             <br>
             <br>
             <input type="range" id="thresh" min="0" max="255" value="200" class="slider" style="width: 75%;" onchange="reprocess()">
             <br>
             <br>
-            <input type="submit">
+            <input type="submit" value="Save this image" onclick="save_img()">
             <br>
           </form>
           <!-- Remind Passowrd -->
           <div id="formFooter">
-            <p><a href="home.html"><b>Home</b></a></p>
+            <p><a href="home.html"><b>Pick a different image</b></a></p>
           </div>
         </div>
       </div>
