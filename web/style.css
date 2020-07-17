@@ -4,24 +4,10 @@
 
 body {
 	font-family: "Poppins", sans-serif;
-	height: 95vh;
-	background: linear-gradient(-45deg, #e73c7e, #23a6d5, #e73c7e);
-	background-size: 400% 400%;
-	animation: gradient 15s ease infinite;
-}
-
-@keyframes gradient {
-	0% {
-		background-position: 0% 50%;
-	}
-
-	50% {
-		background-position: 100% 50%;
-	}
-
-	100% {
-		background-position: 0% 50%;
-	}
+	height: 50%;
+	background: linear-gradient(-45deg, #d73ff5, #23a6d5, #d73ff5);
+	background-size: 100% 90%;
+	overflow: hidden;
 }
 a {
 	color: #92badd;
@@ -47,15 +33,15 @@ h2 {
 	flex-direction: column;
 	justify-content: center;
 	width: 100%;
-	min-height: 100%;
-	padding: 20px;
+	height: 80%;
 }
 #formContent {
 	-webkit-border-radius: 10px 10px 10px 10px;
 	border-radius: 10px 10px 10px 10px;
 	background: #fff;
-	padding: 30px;
-	width: 90%;
+	padding: 10px;
+	width: 80%;
+	height: 80%;
 	position: relative;
 	padding: 0px;
 	-webkit-box-shadow: 0 30px 60px 0 rgba(0, 0, 0, 0.3);
@@ -273,20 +259,6 @@ a {
 	animation: gradient 15s ease infinite;
 	transition: all 0.4s ease-in-out;
 	z-index: -2;
-}
-
-@keyframes gradient {
-	0% {
-		background-position: 0% 50%;
-	}
-
-	50% {
-		background-position: 100% 50%;
-	}
-
-	100% {
-		background-position: 0% 50%;
-	}
 }
 
 .header a {
