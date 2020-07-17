@@ -40,7 +40,7 @@ def change_thresh(thresh):
 def save_final_image():
     """
     This function is exposed to eel. It takes the temp image saved in the web folder (temp) and saves it in the user defined location
-    with the user defined name using tkinter.
+    with the user defined name using tkinter. It deletes the images in the temp folder.
 
     It also prints updates to the terminal
     """
@@ -48,6 +48,9 @@ def save_final_image():
     im_la = process_image_to_LA_array(im)
     save_to_file(im_la)
     print("Final image saved")
+    os.remove(os.path.join("web/temp/.shadow.png"))
+    os.remove(os.path.join("web/temp/.temp.png"))
+    print("Temporary images deleted")
 
     
 
