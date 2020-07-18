@@ -10,6 +10,7 @@ def process_img():
     It also saves a copy of the shadow crushed image to prevent redundant computations when the threshold is being
     tweaked.
     """
+    save_thresh_val("200")
     im = input_image()
     im_la = process_image_to_LA_array(im)
     im_shadow_crush = shadow_crusher(im_la)
@@ -26,6 +27,7 @@ def change_thresh(thresh):
 
     It also prints updates to the terminal
     """
+    save_thresh_val(thresh)
     im = input_crushed_img()
     im_la = process_image_to_LA_array(im)
     im_thresh = threshold_image(im_la, int(thresh))
@@ -47,6 +49,17 @@ def save_final_image():
     os.remove(os.path.join("web/temp/.shadow.png"))
     os.remove(os.path.join("web/temp/.temp.png"))
     print("Temporary images deleted")
+
+@eel.expose
+def save_thresh_val(val):
+    file = open(os.path.join("web/temp/.threshold.txt"),"w") 
+    file.write(val)
+
+@eel.expose
+def get_thresh_val():
+    file = open(os.path.join("web/temp/.threshold.txt"),"r") 
+    thresh = int(file.read())
+    return thresh
 
     
 
