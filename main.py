@@ -48,6 +48,7 @@ def save_final_image():
     save_to_file(im_la)
     os.remove(os.path.join("web/temp/.shadow.png"))
     os.remove(os.path.join("web/temp/.temp.png"))
+    os.remove(os.path.join("web/temp/.threshold.txt"))
     print("Temporary images deleted")
 
 @eel.expose
