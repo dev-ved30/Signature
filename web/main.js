@@ -15,3 +15,11 @@ function save_img() {
 	eel.save_final_image();
 	console.log('Final image is now saved');
 }
+function get_thresh() {
+	var x = 200;
+	eel.get_thresh_val()(function(ret) {
+		console.log(ret);
+		x = ret;
+	});
+	return x;
+}

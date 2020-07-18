@@ -17,12 +17,15 @@
             <img src="temp/.temp.png" style="max-width: 50%; max-height: 50%; align-content: center; border-color: black;">
             <br>
             <br>
-            <input type="range" id="thresh" min="0" max="255" value="200" class="slider" style="width: 75%;" onchange="reprocess()" autocomplete="off">
+            <input type="range" id="thresh" min="0" max="255" value="" class="slider" style="width: 75%;" onchange="reprocess()" autocomplete="off">
             <br>
             <br>
             <input type="submit" value="Save this image" onclick="save_img()">
             <br>
           </form>
+          <script>
+            document.getElementById("thresh").value = get_thresh();
+          </script>
           <!-- Remind Passowrd -->
           <div id="formFooter">
             <p><a href="home.html"><b>Pick a different image</b></a></p>
