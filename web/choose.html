@@ -17,14 +17,17 @@
             <img src="temp/.temp.png" style="max-width: 50%; max-height: 50%; align-content: center; border-color: black;">
             <br>
             <br>
-            <input type="range" id="thresh" min="0" max="255" value="" class="slider" style="width: 75%;" onchange="reprocess()" autocomplete="off">
+            <input type="range" id="thresh" min="0" max="255" value="" class="slider" style="width: 75%;" onchange="reprocess()">
             <br>
             <br>
-            <input type="submit" value="Save this image" onclick="save_img()">
+            <input type="submit" value="Save this image" onclick="save_img()" >
             <br>
           </form>
           <script>
-            document.getElementById("thresh").value = get_thresh();
+            var x = document.cookie.split(';');
+            console.log(x[1])
+            console.log(typeof x[1])
+            document.getElementById('thresh').value = 200;
           </script>
           <!-- Remind Passowrd -->
           <div id="formFooter">
