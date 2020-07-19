@@ -7,7 +7,6 @@ function reprocess() {
 	var threshold = document.getElementById('thresh').value;
 	eel.change_thresh(threshold);
 	document.getElementById('img').src = 'temp/.temp.png';
-	document.cookie = document.getElementById('thresh').value;
 	console.log('Threshold re-processing is complete. Threshold is set to ' + threshold);
 }
 function save_img() {
