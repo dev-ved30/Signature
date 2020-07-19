@@ -1,5 +1,12 @@
-function process_img() {
-	eel.process_img();
+async function process_img() {
+	let x = await eel.process_img()();
+	if (x != 1) {
+		//document.getElementById("home_form").action = "home.html";
+		window.location.href = "home.html";
+	} else {
+		//document.getElementById("home_form").action = "choose.html";
+		window.location.href = "choose.html";
+	}
 	console.log('Initial processing is complete');
 }
 function reprocess() {

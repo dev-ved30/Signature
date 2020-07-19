@@ -24,11 +24,9 @@ def input_image():
         title="Select file",
         filetypes=(("PNG files", "*.png"), ("PNG files", "*.jpg")),
     )
+    im = None
     if root.filename:
         im = Image.open(root.filename)
-    else:
-        print("No image was chosen")
-        exit(1)
     return im
 
 def input_crushed_img():
