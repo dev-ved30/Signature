@@ -10,10 +10,10 @@ import shutil
 def input_image():
     """
     This function asks the user to input a file through the standard OS
-    filewindow. It only accepts PNG and JPG files and will print and error to
-    the terminal otherwise. It reads an image in greyscale.
+    filewindow. It only accepts PNG and JPG files as an image in greyscale.
+
     Returns:
-        PIL Image: The image read from file
+        PIL Image: The image read from file or None if nothing was chosen.
     """
 
     root = Tk()
@@ -25,34 +25,65 @@ def input_image():
         title="Select file",
         filetypes=(("PNG files", "*.png"), ("PNG files", "*.jpg")),
     )
+
     im = None
     if root.filename:
         im = Image.open(root.filename)
     return im
 
 
-def input_crushed_img():
+def read_img(filepath):
     """
-    This function opens the shadow crushed image from the temp folder and returns it.
+    Reads an image from the given filepath.
+
+    Args:
+        filepath (str): The path to the image including the filename
 
     Returns:
-        image[.png]: shadow crushed image
+        PIL Image: The image read from the file
     """
-    filename = os.path.join("web/temp/.shadow.png")
+
+    filename = os.path.join(filepath)
     im = Image.open(filename)
     return im
 
 
-def input_temp_img():
+def save_final(filepath):
     """
-    This function opens the temp image from the temp folder and returns it.
+    Copies the contents of the given file to the final file destination as input by
+    the user in the filedialog.
+
+    Args:
+        filepath (str): The path to the image including the filename
 
     Returns:
-        image[.png]: temp image
+        boolean: True if the save was sucessful and False otherwise
     """
-    filename = os.path.join("web/temp/.temp.png")
-    im = Image.open(filename)
-    return im
+
+    filename = filedialog.asksaveasfile(mode="wb", defaultextension=".png")
+    full_src_path = os.path.join(filepath)
+
+    if filename:
+        shutil.copyfile(full_src_path, filename.name)
+        return True
+    else:
+        return False
+
+
+def save_working_img(im_arr, filepath):
+    """
+    Converts the given LA image to a PIL image and saves it to the given location.
+
+    Args:
+        im_arr (Numpy array): The array representing the LA image
+        filepath (str): The location to save the file at
+    """
+
+    im = Image.fromarray(im_arr, mode="LA")
+    full_path = os.path.join(filepath)
+
+    with open(full_path, "wb") as fileptr:
+        im.save(fileptr)
 
 
 def process_image_to_LA_array(im):
@@ -100,55 +131,6 @@ def threshold_image(im_arr, threshold=204):
     return im_arr
 
 
-def save_final():
-    """
-    Saves the given image to a file through the OS filedialog.
-
-    Args:
-        im (PIL Image): The image to be saved
-    """
-
-    filename = filedialog.asksaveasfile(mode="wb", defaultextension=".png")
-
-    if filename:
-        shutil.copyfile("web/temp/.temp.png", filename.name)
-        return True
-    else:
-        return False
-
-
-def save_to_temp(im_arr):
-    """
-    Saves the given image to the temp file through the OS filedialog.
-
-    Args:
-        im_arr (Numpy array): The image to be saved
-    """
-
-    im = Image.fromarray(im_arr, mode="LA")
-
-    temp_file = open(os.path.join("web/temp/.temp.png"), "wb")
-
-    im.save(temp_file)
-    print("Temp image is saved")
-
-
-def save_shadow_crush(im_arr):
-    """
-    Saves the given image to the shadow file through the OS filedialog.
-
-    Args:
-        im_arr (Numpy array): The image to be saved
-    """
-
-    im = Image.fromarray(im_arr, mode="LA")
-
-    temp_file = open(os.path.join("web/temp/.shadow.png"), "wb")
-
-    im.save(temp_file)
-    print("Shadow Crushed Image is saved")
-
-
 def shadow_crusher(im_arr):
     """
     This function takes the numpy LA array of an image and removes the shadows.
@@ -186,6 +168,7 @@ def shadow_crusher(im_arr):
     Returns:
         Numpy array: Normalized Image with the shadows removed or flattened.
     """
+
     l_plane = im_arr[:, :, 0]
 
     dilated_img = cv.dilate(l_plane, np.ones((7, 7), np.uint8))
@@ -222,12 +205,3 @@ def alias(im_arr):
     img_blur = cv.medianBlur(img_blur, 3)
     img_blur = cv.pyrDown(img_blur)
     return img_blur
-
-
-def main():
-    im = input_image()
-    im_la = process_image_to_LA_array(im)
-    im_shadow_crush = shadow_crusher(im_la)
-    im_thresh = threshold_image(im_shadow_crush)
-    im_alias = alias(im_thresh)
-    save_to_file(im_alias)
