@@ -36,8 +36,8 @@ def process_img():
 
 @eel.expose
 def change_thresh(thresh):
-    """    
-    This function is exposed to eel. It takes the shadow crushed image saved in the web folder (temp), applies the new threshold, 
+    """
+    This function is exposed to eel. It takes the shadow crushed image saved in the web folder (temp), applies the new threshold,
     aliases it and then overwrites the temp image.
 
     Args:
@@ -75,4 +75,3 @@ def save_final_image():
 if __name__ == "__main__":
     eel.init("web")
     eel.start("home.html")
-

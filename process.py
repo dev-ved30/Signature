@@ -49,7 +49,7 @@ def read_img(filepath):
 
 
 def save_final(filepath):
-    """    
+    """
     Copies the contents of the given file to the final file destination as input by
     the user in the filedialog.
 
