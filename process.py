@@ -25,34 +25,35 @@ def input_image():
         title="Select file",
         filetypes=(("PNG files", "*.png"), ("PNG files", "*.jpg")),
     )
+
     im = None
     if root.filename:
         im = Image.open(root.filename)
     return im
 
 
-def input_crushed_img():
-    """
-    This function opens the shadow crushed image from the temp folder and returns it.
-
-    Returns:
-        image[.png]: shadow crushed image
-    """
-    filename = os.path.join("web/temp/.shadow.png")
+def read_img(filepath):
+    filename = os.path.join(filepath)
     im = Image.open(filename)
     return im
 
 
-def input_temp_img():
-    """
-    This function opens the temp image from the temp folder and returns it.
+def save_final():
+    filename = filedialog.asksaveasfile(mode="wb", defaultextension=".png")
 
-    Returns:
-        image[.png]: temp image
-    """
-    filename = os.path.join("web/temp/.temp.png")
-    im = Image.open(filename)
-    return im
+    if filename:
+        shutil.copyfile("web/temp/.temp.png", filename.name)
+        return True
+    else:
+        return False
+
+
+def save_working_img(im_arr, filepath):
+    im = Image.fromarray(im_arr, mode="LA")
+    full_path = os.path.join(filepath)
+
+    with open(full_path, "wb") as fileptr:
+        im.save(fileptr)
 
 
 def process_image_to_LA_array(im):
@@ -98,55 +99,6 @@ def threshold_image(im_arr, threshold=204):
     im_arr[row_indices, col_indices] = [0, 255]
 
     return im_arr
-
-
-def save_final():
-    """
-    Saves the given image to a file through the OS filedialog.
-
-    Args:
-        im (PIL Image): The image to be saved
-    """
-
-    filename = filedialog.asksaveasfile(mode="wb", defaultextension=".png")
-
-    if filename:
-        shutil.copyfile("web/temp/.temp.png", filename.name)
-        return True
-    else:
-        return False
-
-
-def save_to_temp(im_arr):
-    """
-    Saves the given image to the temp file through the OS filedialog.
-
-    Args:
-        im_arr (Numpy array): The image to be saved
-    """
-
-    im = Image.fromarray(im_arr, mode="LA")
-
-    temp_file = open(os.path.join("web/temp/.temp.png"), "wb")
-
-    im.save(temp_file)
-    print("Temp image is saved")
-
-
-def save_shadow_crush(im_arr):
-    """
-    Saves the given image to the shadow file through the OS filedialog.
-
-    Args:
-        im_arr (Numpy array): The image to be saved
-    """
-
-    im = Image.fromarray(im_arr, mode="LA")
-
-    temp_file = open(os.path.join("web/temp/.shadow.png"), "wb")
-
-    im.save(temp_file)
-    print("Shadow Crushed Image is saved")
 
 
 def shadow_crusher(im_arr):
@@ -222,12 +174,3 @@ def alias(im_arr):
     img_blur = cv.medianBlur(img_blur, 3)
     img_blur = cv.pyrDown(img_blur)
     return img_blur
-
-
-def main():
-    im = input_image()
-    im_la = process_image_to_LA_array(im)
-    im_shadow_crush = shadow_crusher(im_la)
-    im_thresh = threshold_image(im_shadow_crush)
-    im_alias = alias(im_thresh)
-    save_to_file(im_alias)

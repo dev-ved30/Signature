@@ -2,6 +2,9 @@ import os.path
 from process import *
 import eel
 
+shadow_crush_img_path = "web/temp/.shadow.png"
+temp_img_path = "web/temp/.temp.png"
+
 
 @eel.expose
 def process_img():
@@ -14,12 +17,13 @@ def process_img():
     if im:
         im_la = process_image_to_LA_array(im)
         im_shadow_crush = shadow_crusher(im_la)
-        save_shadow_crush(im_shadow_crush)
+
+        save_working_img(im_shadow_crush, shadow_crush_img_path)
 
         im_thresh = threshold_image(im_shadow_crush)
         im_alias = alias(im_thresh)
 
-        save_to_temp(im_alias)
+        save_working_img(im_alias, temp_img_path)
 
         return 1
     else:
@@ -34,13 +38,13 @@ def change_thresh(thresh):
 
     It also prints updates to the terminal
     """
-    im = input_crushed_img()
+    im = read_img(shadow_crush_img_path)
     im_la = process_image_to_LA_array(im)
 
     im_thresh = threshold_image(im_la, int(thresh))
     im_alias = alias(im_thresh)
 
-    save_to_temp(im_alias)
+    save_working_img(im_alias, temp_img_path)
 
 
 @eel.expose
@@ -53,11 +57,12 @@ def save_final_image():
     """
     is_saved = save_final()
     if is_saved:
-        os.remove(os.path.join("web/temp/.shadow.png"))
-        os.remove(os.path.join("web/temp/.temp.png"))
+        os.remove(os.path.join(shadow_crush_img_path))
+        os.remove(os.path.join(temp_img_path))
         return 1
     else:
         return 0
+
 
 if __name__ == "__main__":
     eel.init("web")
