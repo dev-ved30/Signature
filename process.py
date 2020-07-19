@@ -10,10 +10,10 @@ import shutil
 def input_image():
     """
     This function asks the user to input a file through the standard OS
-    filewindow. It only accepts PNG and JPG files and will print and error to
-    the terminal otherwise. It reads an image in greyscale.
+    filewindow. It only accepts PNG and JPG files as an image in greyscale.
+
     Returns:
-        PIL Image: The image read from file
+        PIL Image: The image read from file or None if nothing was chosen.
     """
 
     root = Tk()
@@ -33,22 +33,52 @@ def input_image():
 
 
 def read_img(filepath):
+    """
+    Reads an image from the given filepath.
+
+    Args:
+        filepath (str): The path to the image including the filename
+
+    Returns:
+        PIL Image: The image read from the file
+    """
+
     filename = os.path.join(filepath)
     im = Image.open(filename)
     return im
 
 
-def save_final():
+def save_final(filepath):
+    """    
+    Copies the contents of the given file to the final file destination as input by
+    the user in the filedialog.
+
+    Args:
+        filepath (str): The path to the image including the filename
+
+    Returns:
+        boolean: True if the save was sucessful and False otherwise
+    """
+
     filename = filedialog.asksaveasfile(mode="wb", defaultextension=".png")
+    full_src_path = os.path.join(filepath)
 
     if filename:
-        shutil.copyfile("web/temp/.temp.png", filename.name)
+        shutil.copyfile(full_src_path, filename.name)
         return True
     else:
         return False
 
 
 def save_working_img(im_arr, filepath):
+    """
+    Converts the given LA image to a PIL image and saves it to the given location.
+
+    Args:
+        im_arr (Numpy array): The array representing the LA image
+        filepath (str): The location to save the file at
+    """
+
     im = Image.fromarray(im_arr, mode="LA")
     full_path = os.path.join(filepath)
 
@@ -138,6 +168,7 @@ def shadow_crusher(im_arr):
     Returns:
         Numpy array: Normalized Image with the shadows removed or flattened.
     """
+
     l_plane = im_arr[:, :, 0]
 
     dilated_img = cv.dilate(l_plane, np.ones((7, 7), np.uint8))
