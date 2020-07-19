@@ -21,9 +21,9 @@ That's where `Signature` comes in. Using python, we built a simple utility that 
     * Run `pip install numpy`
     * Run `pip install Pillow`
     * Run `pip install opencv-python`
-    * Install Kivy. Refer to the relevant OS instructions [here](https://kivy.org/#download)
+    * Run `pip install eel`
 
-**Note:** For develoment and testing, we used `Python 3.7.x`, `Pillow 7.2.0`, `Open CV 4.3.0.36`, and `Numpy 1.19.0`.
+**Note:** For develoment and testing, we used `Python 3.7.x`,`Eel 0.13.2`, `Pillow 7.2.0`, `Open CV 4.3.0.36`, and `Numpy 1.19.0`.
 
 ### Running
 
