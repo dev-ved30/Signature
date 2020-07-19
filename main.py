@@ -1,5 +1,4 @@
-import os
-from os import path
+import os.path
 from process import *
 import eel
 
@@ -16,12 +15,16 @@ def process_img():
         im_la = process_image_to_LA_array(im)
         im_shadow_crush = shadow_crusher(im_la)
         save_shadow_crush(im_shadow_crush)
+
         im_thresh = threshold_image(im_shadow_crush)
         im_alias = alias(im_thresh)
+
         save_to_temp(im_alias)
+
         return 1
     else:
         return 0
+
 
 @eel.expose
 def change_thresh(thresh):
@@ -33,10 +36,12 @@ def change_thresh(thresh):
     """
     im = input_crushed_img()
     im_la = process_image_to_LA_array(im)
+
     im_thresh = threshold_image(im_la, int(thresh))
     im_alias = alias(im_thresh)
+
     save_to_temp(im_alias)
-    print("Threshold change completed. Threshold set to", thresh)
+
 
 @eel.expose
 def save_final_image():
@@ -46,15 +51,15 @@ def save_final_image():
 
     It also prints updates to the terminal
     """
-    im = input_temp_img()
-    im_la = process_image_to_LA_array(im)
-    save_to_file(im_la)
-    os.remove(os.path.join("web/temp/.shadow.png"))
-    os.remove(os.path.join("web/temp/.temp.png"))
-    print("Temporary images deleted")
-    
+    is_saved = save_final()
+    if is_saved:
+        os.remove(os.path.join("web/temp/.shadow.png"))
+        os.remove(os.path.join("web/temp/.temp.png"))
+        return 1
+    else:
+        return 0
 
-if __name__=="__main__":
-    eel.init('web')
-    eel.start('home.html')
-    
+if __name__ == "__main__":
+    eel.init("web")
+    eel.start("home.html")
+

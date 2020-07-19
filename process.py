@@ -4,6 +4,7 @@ import numpy as np
 import cv2 as cv
 from PIL import Image
 import os.path
+import shutil
 
 
 def input_image():
@@ -29,6 +30,7 @@ def input_image():
         im = Image.open(root.filename)
     return im
 
+
 def input_crushed_img():
     """
     This function opens the shadow crushed image from the temp folder and returns it.
@@ -39,6 +41,7 @@ def input_crushed_img():
     filename = os.path.join("web/temp/.shadow.png")
     im = Image.open(filename)
     return im
+
 
 def input_temp_img():
     """
@@ -97,25 +100,21 @@ def threshold_image(im_arr, threshold=204):
     return im_arr
 
 
-def save_to_file(im_arr):
+def save_final():
     """
     Saves the given image to a file through the OS filedialog.
 
     Args:
-        im_arr (Numpy array): The image to be saved
+        im (PIL Image): The image to be saved
     """
-
-    im = Image.fromarray(im_arr, mode="LA")
 
     filename = filedialog.asksaveasfile(mode="wb", defaultextension=".png")
 
     if filename:
-        im.save(filename)
-        print("Final image saved")
-        im.show()
+        shutil.copyfile("web/temp/.temp.png", filename.name)
+        return True
     else:
-        print("No save location was chosen")
-        pass
+        return False
 
 
 def save_to_temp(im_arr):
@@ -132,6 +131,7 @@ def save_to_temp(im_arr):
 
     im.save(temp_file)
     print("Temp image is saved")
+
 
 def save_shadow_crush(im_arr):
     """
@@ -222,6 +222,7 @@ def alias(im_arr):
     img_blur = cv.medianBlur(img_blur, 3)
     img_blur = cv.pyrDown(img_blur)
     return img_blur
+
 
 def main():
     im = input_image()
