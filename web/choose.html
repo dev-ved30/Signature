@@ -6,6 +6,11 @@
   <script type="text/javascript" src="main.js"></script>
   <script type="text/javascript" src="/eel.js"></script>
 </head>
+<style>
+  body{
+    background: linear-gradient(-45deg, #d73ff5, #23a6d5, #d73ff5);;
+  }
+</style>
 <link rel="stylesheet" type="text/css" href="style.css">
 <body>
     <div class="wrapper fadeInDown">
@@ -16,8 +21,9 @@
             <br>
             <img src="temp/.temp.png" style="max-width: 50%; max-height: 50%; align-content: center; border-color: black;" id="img">
             <br>
+            <p><b>Note:</b> Higher thresholds will improve detail but introduce noise</p>
             <br>
-            <input type="range" id="thresh" min="0" max="255" value="" class="slider" style="width: 75%;" onchange="reprocess()">
+            <input type="range" id="thresh" min="0" max="255" value="200" class="slider" style="width: 75%;" onchange="reprocess()">
             <br>
             <br>
             <input type="submit" value="Save this image" onclick="save_img()" >

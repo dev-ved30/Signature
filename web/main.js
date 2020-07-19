@@ -1,7 +1,6 @@
 function process_img() {
 	eel.process_img();
 	console.log('Initial processing is complete');
-	console.log('Redirecting to edit page');
 }
 function reprocess() {
 	var threshold = document.getElementById('thresh').value;
@@ -11,4 +10,5 @@ function reprocess() {
 }
 function save_img() {
 	eel.save_final_image();
+	console.log('Final Image Saved');
 }
