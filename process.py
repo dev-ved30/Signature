@@ -3,31 +3,87 @@ from tkinter import filedialog
 import numpy as np
 import cv2 as cv
 from PIL import Image
+import os.path
+import shutil
 
 
 def input_image():
     """
     This function asks the user to input a file through the standard OS
-    filewindow. It only accepts PNG and JPG files and will print and error to
-    the terminal otherwise. It reads an image in greyscale.
+    filewindow. It only accepts PNG and JPG files as an image in greyscale.
 
     Returns:
-        PIL Image: The image read from file
+        PIL Image: The image read from file or None if nothing was chosen.
     """
 
     root = Tk()
     root.withdraw()
+    root.attributes("-topmost", True)
+    root.lift()
     root.filename = filedialog.askopenfilename(
         initialdir="/$HOME/",
         title="Select file",
         filetypes=(("PNG files", "*.png"), ("PNG files", "*.jpg")),
     )
+
+    im = None
     if root.filename:
         im = Image.open(root.filename)
-    else:
-        print("No image was chosen")
-        exit(1)
     return im
+
+
+def read_img(filepath):
+    """
+    Reads an image from the given filepath.
+
+    Args:
+        filepath (str): The path to the image including the filename
+
+    Returns:
+        PIL Image: The image read from the file
+    """
+
+    filename = os.path.join(filepath)
+    im = Image.open(filename)
+    return im
+
+
+def save_final(filepath):
+    """
+    Copies the contents of the given file to the final file destination as input by
+    the user in the filedialog.
+
+    Args:
+        filepath (str): The path to the image including the filename
+
+    Returns:
+        boolean: True if the save was sucessful and False otherwise
+    """
+
+    filename = filedialog.asksaveasfile(mode="wb", defaultextension=".png")
+    full_src_path = os.path.join(filepath)
+
+    if filename:
+        shutil.copyfile(full_src_path, filename.name)
+        return True
+    else:
+        return False
+
+
+def save_working_img(im_arr, filepath):
+    """
+    Converts the given LA image to a PIL image and saves it to the given location.
+
+    Args:
+        im_arr (Numpy array): The array representing the LA image
+        filepath (str): The location to save the file at
+    """
+
+    im = Image.fromarray(im_arr, mode="LA")
+    full_path = os.path.join(filepath)
+
+    with open(full_path, "wb") as fileptr:
+        im.save(fileptr)
 
 
 def process_image_to_LA_array(im):
@@ -75,41 +131,6 @@ def threshold_image(im_arr, threshold=204):
     return im_arr
 
 
-def save_to_file(im_arr):
-    """
-    Saves the given image to a file through the OS filedialog.
-
-    Args:
-        im_arr (Numpy array): The image to be saved
-    """
-
-    im = Image.fromarray(im_arr, mode="LA")
-
-    filename = filedialog.asksaveasfile(mode="wb", defaultextension=".png")
-
-    if filename:
-        im.save(filename)
-        im.show()
-    else:
-        print("No save location was chosen")
-        exit(1)
-
-
-def save_to_temp(im_arr):
-    """
-    Saves the given image to a file through the OS filedialog.
-
-    Args:
-        im_arr (Numpy array): The image to be saved
-    """
-
-    im = Image.fromarray(im_arr, mode="LA")
-
-    temp_file = open(".temp.png", "wb")
-
-    im.save(temp_file)
-
-
 def shadow_crusher(im_arr):
     """
     This function takes the numpy LA array of an image and removes the shadows.
@@ -147,6 +168,7 @@ def shadow_crusher(im_arr):
     Returns:
         Numpy array: Normalized Image with the shadows removed or flattened.
     """
+
     l_plane = im_arr[:, :, 0]
 
     dilated_img = cv.dilate(l_plane, np.ones((7, 7), np.uint8))
