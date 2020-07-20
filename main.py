@@ -79,4 +79,4 @@ def save_final_image():
 
 if __name__ == "__main__":
     eel.init("web")
-    eel.start("home.html")
+    eel.start("home.html", size=(1100,850))
