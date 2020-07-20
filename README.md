@@ -54,7 +54,7 @@ Assuming you have pip, git and an appropriate version of python, you can begin b
 
 #### Running: 
 * In your terminal, navigate to the project folder you cloned
-* Run `python main.py` (Remember to use python3)
+* Run `python main.py` (Remember to make sure you're using Python 3)
 
 We are happy to accept suggestions in the `Issues` tab. After we've discussed the changes, we will accept pull requests on a case by case basis.
      
