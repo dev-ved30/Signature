@@ -35,7 +35,7 @@ That's where `Signature` comes in. Using python, we built a simple utility that 
 
 * Running: 
     * In your terminal, navigate to the project folder you cloned
-    * Run `python main.py` (Remember to use python3s)
+    * Run `python main.py` (Remember to use python3)
      
 ## Found Bugs?
 
