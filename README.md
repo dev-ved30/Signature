@@ -1,22 +1,49 @@
 # Signature
-Have you ever been in a situation where you wanted to include a picture of your signature in a document, but were held back due to this?
+
+![](images/home.png)
+
+Have you ever been in a situation where you wanted to include a picture of your signature in a document, but were held back because of this?
 
 ![](images/orignal.png)
 
-That's where `Signature` comes in. Using python, we built a simple utility that does the job. Take a look!
+That's where `Signature` comes in. Take a look!
 
 ![](images/processed.png)
 
-## Using Locally
+`Signature` is modern, cross-platform application that can convert any image into an e-signature. It is fast, effecient and beautiful.
 
-### Before Running (Assuming you have pip, git and an appropriate version of python)
+## Installation:
 
+* Download the zip folder of the latest release for your operating system from our [releases page](https://github.com/dev-ved30/Signature/releases)
+* Unzip the folder.
+* Run `signature` by double clicking the executable.
+* That's it! You should now be up and running :)
+
+If you come across any issues while installing, you can report them [here](https://github.com/dev-ved30/Signature/issues).
+
+## Privacy:
+
+We take privacy very seriously and believe that your data is yours only. That is why Signature is built to run on-device. Your information never leaves your computer and we do not collect or store any data or telemetry.
+
+## Bugs?
+
+We would appreciate support in the form of bug reports in order to provide the best possible experience. Bugs can be reported in the [Issues tab](https://github.com/dev-ved30/Signature/issues)
+
+---
+## For developers:
+If you are a developer and want to work with the code, you can follow the instructions below.
+### Installation
+Assuming you have pip, git and an appropriate version of python, you can begin by cloning the repository.
+
+* Run `git clone https://github.com/dev-ved30/Signature.git` in your terminal.
+
+#### Before Running:
 * If you're not worried about breaking anything in your environment:
     * On Windows:
-        * Run `pip install -r win_requirements.txt`
+    Run `pip install -r win_requirements.txt`
     * On MacOS/Linux:
-        * Run `pip install -r unix_requirements.txt`
-
+    Run `pip install -r unix_requirements.txt`
+            
 * Otherwise, if you're trying to install the dependencies individually:
     * Run `pip install numpy`
     * Run `pip install Pillow`
@@ -25,18 +52,10 @@ That's where `Signature` comes in. Using python, we built a simple utility that 
 
 **Note:** For develoment and testing, we used `Python 3.7.x`,`Eel 0.13.2`, `Pillow 7.2.0`, `Open CV 4.3.0.36`, and `Numpy 1.19.0`.
 
-### Running
+#### Running: 
+* In your terminal, navigate to the project folder you cloned
+* Run `python main.py` (Remember to make sure you're using Python 3)
 
-In your terminal, navigate to the project folder you cloned and run:
+We are happy to accept suggestions in the `Issues` tab. After we've discussed the changes, we will accept pull requests on a case by case basis.
+     
 
-`python main.py`
-
-The command assumes python3 is aliased to python. On Windows if you only have Python 3.x installed the aliasing should be done for you, but on Linux you would have be more explicit depending on the distro and its version. So, if the command above fails try:
-
-`python3 main.py`
-
-We do plan on launching an `exe` for the this utility in a future release!
-
-## Found Bugs?
-
-We would appreciate any support in the form of bug reports in order to provide the best possible experience. Bugs can be reported in the `Issues` tab

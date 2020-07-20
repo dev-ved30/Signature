@@ -1,7 +1,12 @@
+import os
 import os.path
 from process import *
 import eel
 
+try:
+    os.makedirs("web/temp")
+except:
+    pass
 shadow_crush_img_path = "web/temp/.shadow.png"
 temp_img_path = "web/temp/.temp.png"
 
@@ -74,4 +79,4 @@ def save_final_image():
 
 if __name__ == "__main__":
     eel.init("web")
-    eel.start("home.html")
+    eel.start("home.html", size=(1100,850))
