@@ -16,7 +16,7 @@ That's where `Signature` comes in. Take a look!
 
 * Download the zip folder of the latest release for your operating system from our [releases page](https://github.com/dev-ved30/Signature/releases)
 * Unzip the folder.
-* Run `signature` by double clicking the executable.
+* Locate and run the `signature` application inside the directory.
 * That's it! You should now be up and running :)
 
 If you come across any issues while installing, you can report them [here](https://github.com/dev-ved30/Signature/issues).
