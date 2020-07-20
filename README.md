@@ -11,7 +11,7 @@ That's where `Signature` comes in. Using python, we built a simple utility that 
 
 ### From the releases (for standard users)
 
-* Download the appropriate zipped folder for your operating system from our [releases page](INSERT LINK LATER)
+* Download the appropriate zipped folder for your operating system from our [releases page](https://github.com/dev-ved30/Signature/releases)
 * Unzip the folder.
 * Run `main` by double clicking the executable.
 * That's it! You should now be up and running :)
