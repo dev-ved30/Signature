@@ -29,6 +29,10 @@ We take privacy very seriously and believe that your data is yours only. That is
 
 We would appreciate support in the form of bug reports in order to provide the best possible experience. Bugs can be reported in the [Issues tab](https://github.com/dev-ved30/Signature/issues)
 
+## Credit
+
+Huge shoutout to [Daniel Zawadzki](https://codepen.io/danzawadzki/pens/showcase) whose form we found on `templatemonster.com`
+
 ---
 ## For developers:
 If you are a developer and want to work with the code, you can follow the instructions below.
