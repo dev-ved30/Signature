@@ -5,12 +5,17 @@
   <script type="text/javascript" src="main.js"></script>
   <script type="text/javascript" src="/eel.js"></script>
   <link rel="stylesheet" type="text/css" href="style.css">
+  <style>
+    body{
+      background: white;
+    }
+  </style>
 </head>
 <body>
-    <div class="wrapper fadeInDown">
-        <div id="formContent">
+    <div class="choose">
           <form action="home.html">
             <h2 class="active">Make changes to the image</h2>
+            <br>
             <br>
             <img src="temp/.temp.png" style="max-width: 50%; max-height: 50%; align-content: center; border-color: black;" id="img">
             <br>
@@ -20,11 +25,8 @@
             <br>
             <br>
             <input type="submit" value="Save this image" onclick="save_img()" >
-          </form>
-          <div id="formFooter">
             <p><a style="color: #56baed;" href="home.html"><b>Pick a different image</b></a></p>
-          </div>
-        </div>
+      </form>
       </div>
 </body>
 </html>

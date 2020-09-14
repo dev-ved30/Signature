@@ -192,6 +192,13 @@ a {
 	text-align: center;
 	text-shadow: 0 2px 3px rgba(0, 0, 0, 0.2);
 }
+.choose {
+	width: 100%;
+	padding-top: 1%;
+	padding-bottom: 0%;
+	text-align: center;
+	text-shadow: 0 2px 3px rgba(0, 0, 0, 0.2);
+}
 .info h4,
 .meta {
 	font-size: 0.7em;
